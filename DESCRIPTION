@@ -1,6 +1,6 @@
 Package: ggmeta
-Title: Publication-Quality Forest Plots with 'ggplot2'
-Version: 0.1.0.9000
+Title: Publication-Quality Forest and Funnel Plots with 'ggplot2'
+Version: 0.1.0
 Authors@R: c(
     person(given = "Hercules R.",
            family = "Freitas",
@@ -8,12 +8,13 @@ Authors@R: c(
            email = "hercules.freitas@uerj.br",
            comment = c(ORCID = "0000-0003-1584-9157")))
 Description: A 'ggplot2' extension that creates publication-quality forest
-    plots from 'meta' package objects or tidy data frames. Provides custom
-    'ggproto' geometries for study-level confidence intervals with
+    and funnel plots from 'meta' package objects or tidy data frames. Provides
+    custom 'ggproto' geometries for study-level confidence intervals with
     weight-proportional squares, summary effect diamonds, prediction
-    intervals, and null-effect reference lines. Supports subgroup analysis,
-    back-transformation of ratio measures, and journal-specific layout
-    presets (JAMA, BMJ, RevMan5).
+    intervals, null-effect reference lines, and funnel-plot contours. Supports
+    subgroup analysis, back-transformation of summary measures, on-the-fly
+    effect pooling, effect and weight table columns, and journal-specific
+    layout presets (JAMA, BMJ, RevMan5).
 License: GPL (>= 3)
 URL: https://github.com/drhrf/ggmeta, https://drhrf.github.io/ggmeta/
 BugReports: https://github.com/drhrf/ggmeta/issues

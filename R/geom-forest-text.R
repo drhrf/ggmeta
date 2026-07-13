@@ -33,6 +33,7 @@
 #'   plot's `x`/`xmin`/`xmax`/`weight` mapping, so only `y` and `label` need to
 #'   be supplied.
 #'
+#' @return A ggplot2 layer.
 #' @export
 #'
 #' @examples

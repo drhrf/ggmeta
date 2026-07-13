@@ -20,6 +20,7 @@
 #' @param xintercept X-axis intercept for the reference line.
 #'   Default: `0` (null effect for difference measures).
 #'
+#' @return A ggplot2 layer.
 #' @export
 #'
 #' @examples

@@ -26,6 +26,7 @@
 #' @param diamond_height Height of the diamond as a proportion of the
 #'   spacing between study rows. Default: `0.4`.
 #'
+#' @return A ggplot2 layer.
 #' @export
 #'
 #' @examples

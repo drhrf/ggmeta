@@ -58,6 +58,9 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:annotation_borders]{annotation_borders()}}.}
 }
+\value{
+A ggplot2 layer.
+}
 \description{
 \code{geom_forest_ref()} draws a vertical reference line at the null effect
 value — typically 0 for difference measures (MD, SMD) or 1 for ratio

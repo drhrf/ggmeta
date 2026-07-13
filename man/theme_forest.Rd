@@ -20,6 +20,9 @@ theme_forest(
 
 \item{base_rect_size}{Base rect size. Default: \code{base_size / 22}.}
 }
+\value{
+A ggplot2 theme object (a list of class \code{"theme"}).
+}
 \description{
 A complete ggplot2 theme optimized for forest plots. Removes
 unnecessary grid lines, adjusts margins, and sets sensible

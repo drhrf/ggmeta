@@ -26,6 +26,7 @@
 #' @param cap_width Width of the capped end-marks as a proportion of
 #'   row spacing. Default: `0.32`.
 #'
+#' @return A ggplot2 layer.
 #' @export
 #'
 #' @examples

@@ -9,6 +9,7 @@
 #' @param base_line_size Base line size. Default: `base_size / 22`.
 #' @param base_rect_size Base rect size. Default: `base_size / 22`.
 #'
+#' @return A ggplot2 theme object (a list of class `"theme"`).
 #' @export
 #'
 #' @examples

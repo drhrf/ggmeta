@@ -33,6 +33,7 @@
 #' @param point_size_range Minimum and maximum point size in mm.
 #'   Default: `c(1, 6)`.
 #'
+#' @return A ggplot2 layer.
 #' @export
 #'
 #' @examples

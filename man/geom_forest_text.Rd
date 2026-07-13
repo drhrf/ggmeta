@@ -91,6 +91,9 @@ but unobserved levels are omitted.}
 plot's \code{x}/\code{xmin}/\code{xmax}/\code{weight} mapping, so only \code{y} and \code{label} need to
 be supplied.}
 }
+\value{
+A ggplot2 layer.
+}
 \description{
 \code{geom_forest_text()} places a column of text labels aligned with the study
 rows of a forest plot — for example event counts, sample sizes, weights, or
