@@ -38,33 +38,102 @@ ggforest(studies, add_summary = TRUE)
 
 ![](reference/figures/README-quick-start-1.png)
 
-With a `meta` object,
-[`ggforest()`](https://drhrf.github.io/ggmeta/reference/ggforest.md)
-reads everything it needs directly:
+## Estimates, CIs, weights, and heterogeneity
+
+Pass a `meta` object and add `columns = TRUE` to reproduce the familiar
+[`meta::forest()`](https://wviechtb.github.io/metafor/reference/forest.html)
+table: an effect estimate, 95% CI, and weight column for every study and
+summary, headers, and a heterogeneity line (*I²*, *τ²*, *Q*, *p*) — all
+as a plain `ggplot`.
 
 ``` r
 
 library(meta)
-m <- metabin(event.e, n.e, event.c, n.c, data = dat, studlab = study, sm = "RR")
-ggforest(m)
+#> Loading required package: metabook
+#> Loading 'meta' package (version 8.5-0).
+#> Type 'help(meta)' for a brief overview.
+
+dat <- data.frame(
+  study   = c("Adams 2019", "Baker 2020", "Chen 2020",
+              "Diaz 2021", "Evans 2022", "Foster 2023"),
+  event.e = c(12,  8, 25, 18, 30, 15), n.e = c(120,  90, 200, 150, 250, 130),
+  event.c = c(20, 14, 30, 28, 35, 25), n.c = c(118,  92, 205, 148, 245, 128)
+)
+
+m <- metabin(event.e, n.e, event.c, n.c,
+             data = dat, studlab = study, sm = "RR")
+
+ggforest(m, columns = TRUE)
+```
+
+![](reference/figures/README-meta-columns-1.png)
+
+Everything is optional. Choose which columns to show, and toggle the
+other elements on or off:
+
+``` r
+
+ggforest(m, columns = c("estimate", "ci")) # only some columns
+ggforest(m, effect_header = "Risk ratio")  # rename the estimate column
+ggforest(m, show_hetstats = FALSE)          # hide the heterogeneity line
+ggforest(m, show_predict  = FALSE)          # hide the prediction interval
+ggforest(m, sort_studies  = FALSE)          # keep the input order
+```
+
+## Journal styles
+
+Layout presets restyle a plot for common journals. They are ordinary
+ggplot2 components, so you add them with `+`:
+
+``` r
+
+layout_jama(ggforest(m, columns = TRUE))
+```
+
+![](reference/figures/README-layout-jama-1.png)
+
+[`layout_bmj()`](https://drhrf.github.io/ggmeta/reference/layout_bmj.md)
+and
+[`layout_revman5()`](https://drhrf.github.io/ggmeta/reference/layout_revman5.md)
+are also available.
+
+## Custom columns
+
+For a column of your own — sample sizes, events, anything — use
+[`geom_forest_text()`](https://drhrf.github.io/ggmeta/reference/geom_forest_text.md),
+aligned to the study rows through the shared `y`.
+[`tidy_meta()`](https://drhrf.github.io/ggmeta/reference/tidy_meta.md)
+exposes the same tidy data frame
+[`ggforest()`](https://drhrf.github.io/ggmeta/reference/ggforest.md)
+builds internally, and
+[`format_effect()`](https://drhrf.github.io/ggmeta/reference/format_effect.md)
+builds `"estimate (low to high)"` labels:
+
+``` r
+
+td      <- tidy_meta(m)
+studies <- td[!td$is_summary, ]
+
+ggforest(m) +
+  geom_forest_text(aes(y = studlab, label = n.e), data = studies,
+                   x = 4, hjust = 0) +
+  expand_limits(x = 6)
 ```
 
 ## Why ggmeta?
 
 - **ggplot2 native** — add themes, layers, annotations, and facets; save
   with `ggsave()`.
-- **Custom geometries** — proper `ggproto` geoms for CIs, summary
-  diamonds, prediction intervals, and reference lines.
+- **[`meta::forest()`](https://wviechtb.github.io/metafor/reference/forest.html)-style
+  tables** — estimate / CI / weight columns and a heterogeneity caption,
+  via `columns = TRUE`.
+- **Standalone or `meta`** — works on a tidy data frame or a `meta`
+  object, and can pool studies itself (`add_summary = TRUE`).
 - **Correct by construction** — every summary measure is
   back-transformed with its right inverse (ratios, logit proportions,
   Fisher-*z* correlations, rates).
-- **Standalone or `meta`** — works on a tidy data frame or a `meta`
-  object, and can pool studies itself.
-- **Table columns** — add
-  [`meta::forest()`](https://wviechtb.github.io/metafor/reference/forest.html)-style
-  effect / CI / weight columns with `ggforest(columns = TRUE)`, or
-  custom columns with
-  [`geom_forest_text()`](https://drhrf.github.io/ggmeta/reference/geom_forest_text.md).
+- **Custom geometries** — proper `ggproto` geoms for CIs, summary
+  diamonds, prediction intervals, reference lines, and text columns.
 - **Journal styles** —
   [`layout_jama()`](https://drhrf.github.io/ggmeta/reference/layout_jama.md),
   [`layout_bmj()`](https://drhrf.github.io/ggmeta/reference/layout_bmj.md),

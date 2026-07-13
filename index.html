@@ -77,11 +77,58 @@
 <span></span>
 <span><span class="fu"><a href="reference/ggforest.html">ggforest</a></span><span class="op">(</span><span class="va">studies</span>, add_summary <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-quick-start-1.png" alt="" width="100%"></p>
-<p>With a <code>meta</code> object, <code><a href="reference/ggforest.html">ggforest()</a></code> reads everything it needs directly:</p>
+</div>
+<div class="section level2">
+<h2 id="estimates-cis-weights-and-heterogeneity">Estimates, CIs, weights, and heterogeneity<a class="anchor" aria-label="anchor" href="#estimates-cis-weights-and-heterogeneity"></a>
+</h2>
+<p>Pass a <code>meta</code> object and add <code>columns = TRUE</code> to reproduce the familiar <code><a href="https://wviechtb.github.io/metafor/reference/forest.html" class="external-link">meta::forest()</a></code> table: an effect estimate, 95% CI, and weight column for every study and summary, headers, and a heterogeneity line (<em>I²</em>, <em>τ²</em>, <em>Q</em>, <em>p</em>) — all as a plain <code>ggplot</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/guido-s/meta/" class="external-link">meta</a></span><span class="op">)</span></span>
-<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/meta/man/metabin.html" class="external-link">metabin</a></span><span class="op">(</span><span class="va">event.e</span>, <span class="va">n.e</span>, <span class="va">event.c</span>, <span class="va">n.c</span>, data <span class="op">=</span> <span class="va">dat</span>, studlab <span class="op">=</span> <span class="va">study</span>, sm <span class="op">=</span> <span class="st">"RR"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/ggforest.html">ggforest</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co">#&gt; Loading required package: metabook</span></span>
+<span><span class="co">#&gt; Loading 'meta' package (version 8.5-0).</span></span>
+<span><span class="co">#&gt; Type 'help(meta)' for a brief overview.</span></span>
+<span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  study   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Adams 2019"</span>, <span class="st">"Baker 2020"</span>, <span class="st">"Chen 2020"</span>,</span>
+<span>              <span class="st">"Diaz 2021"</span>, <span class="st">"Evans 2022"</span>, <span class="st">"Foster 2023"</span><span class="op">)</span>,</span>
+<span>  event.e <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>,  <span class="fl">8</span>, <span class="fl">25</span>, <span class="fl">18</span>, <span class="fl">30</span>, <span class="fl">15</span><span class="op">)</span>, n.e <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">120</span>,  <span class="fl">90</span>, <span class="fl">200</span>, <span class="fl">150</span>, <span class="fl">250</span>, <span class="fl">130</span><span class="op">)</span>,</span>
+<span>  event.c <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">14</span>, <span class="fl">30</span>, <span class="fl">28</span>, <span class="fl">35</span>, <span class="fl">25</span><span class="op">)</span>, n.c <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">118</span>,  <span class="fl">92</span>, <span class="fl">205</span>, <span class="fl">148</span>, <span class="fl">245</span>, <span class="fl">128</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/meta/man/metabin.html" class="external-link">metabin</a></span><span class="op">(</span><span class="va">event.e</span>, <span class="va">n.e</span>, <span class="va">event.c</span>, <span class="va">n.c</span>,</span>
+<span>             data <span class="op">=</span> <span class="va">dat</span>, studlab <span class="op">=</span> <span class="va">study</span>, sm <span class="op">=</span> <span class="st">"RR"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/ggforest.html">ggforest</a></span><span class="op">(</span><span class="va">m</span>, columns <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-meta-columns-1.png" alt="" width="100%"></p>
+<p>Everything is optional. Choose which columns to show, and toggle the other elements on or off:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/ggforest.html">ggforest</a></span><span class="op">(</span><span class="va">m</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"ci"</span><span class="op">)</span><span class="op">)</span> <span class="co"># only some columns</span></span>
+<span><span class="fu"><a href="reference/ggforest.html">ggforest</a></span><span class="op">(</span><span class="va">m</span>, effect_header <span class="op">=</span> <span class="st">"Risk ratio"</span><span class="op">)</span>  <span class="co"># rename the estimate column</span></span>
+<span><span class="fu"><a href="reference/ggforest.html">ggforest</a></span><span class="op">(</span><span class="va">m</span>, show_hetstats <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>          <span class="co"># hide the heterogeneity line</span></span>
+<span><span class="fu"><a href="reference/ggforest.html">ggforest</a></span><span class="op">(</span><span class="va">m</span>, show_predict  <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>          <span class="co"># hide the prediction interval</span></span>
+<span><span class="fu"><a href="reference/ggforest.html">ggforest</a></span><span class="op">(</span><span class="va">m</span>, sort_studies  <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>          <span class="co"># keep the input order</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="journal-styles">Journal styles<a class="anchor" aria-label="anchor" href="#journal-styles"></a>
+</h2>
+<p>Layout presets restyle a plot for common journals. They are ordinary ggplot2 components, so you add them with <code>+</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/layout_jama.html">layout_jama</a></span><span class="op">(</span><span class="fu"><a href="reference/ggforest.html">ggforest</a></span><span class="op">(</span><span class="va">m</span>, columns <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-layout-jama-1.png" alt="" width="100%"></p>
+<p><code><a href="reference/layout_bmj.html">layout_bmj()</a></code> and <code><a href="reference/layout_revman5.html">layout_revman5()</a></code> are also available.</p>
+</div>
+<div class="section level2">
+<h2 id="custom-columns">Custom columns<a class="anchor" aria-label="anchor" href="#custom-columns"></a>
+</h2>
+<p>For a column of your own — sample sizes, events, anything — use <code><a href="reference/geom_forest_text.html">geom_forest_text()</a></code>, aligned to the study rows through the shared <code>y</code>. <code><a href="reference/tidy_meta.html">tidy_meta()</a></code> exposes the same tidy data frame <code><a href="reference/ggforest.html">ggforest()</a></code> builds internally, and <code><a href="reference/format_effect.html">format_effect()</a></code> builds <code>"estimate (low to high)"</code> labels:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">td</span>      <span class="op">&lt;-</span> <span class="fu"><a href="reference/tidy_meta.html">tidy_meta</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="va">studies</span> <span class="op">&lt;-</span> <span class="va">td</span><span class="op">[</span><span class="op">!</span><span class="va">td</span><span class="op">$</span><span class="va">is_summary</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/ggforest.html">ggforest</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_forest_text.html">geom_forest_text</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">studlab</span>, label <span class="op">=</span> <span class="va">n.e</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">studies</span>,</span>
+<span>                   x <span class="op">=</span> <span class="fl">4</span>, hjust <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">expand_limits</span><span class="op">(</span>x <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="why-ggmeta">Why ggmeta?<a class="anchor" aria-label="anchor" href="#why-ggmeta"></a>
@@ -90,13 +137,13 @@
 <li>
 <strong>ggplot2 native</strong> — add themes, layers, annotations, and facets; save with <code>ggsave()</code>.</li>
 <li>
-<strong>Custom geometries</strong> — proper <code>ggproto</code> geoms for CIs, summary diamonds, prediction intervals, and reference lines.</li>
+<strong><code><a href="https://wviechtb.github.io/metafor/reference/forest.html" class="external-link">meta::forest()</a></code>-style tables</strong> — estimate / CI / weight columns and a heterogeneity caption, via <code>columns = TRUE</code>.</li>
+<li>
+<strong>Standalone or <code>meta</code></strong> — works on a tidy data frame or a <code>meta</code> object, and can pool studies itself (<code>add_summary = TRUE</code>).</li>
 <li>
 <strong>Correct by construction</strong> — every summary measure is back-transformed with its right inverse (ratios, logit proportions, Fisher-<em>z</em> correlations, rates).</li>
 <li>
-<strong>Standalone or <code>meta</code></strong> — works on a tidy data frame or a <code>meta</code> object, and can pool studies itself.</li>
-<li>
-<strong>Table columns</strong> — add <code><a href="https://wviechtb.github.io/metafor/reference/forest.html" class="external-link">meta::forest()</a></code>-style effect / CI / weight columns with <code>ggforest(columns = TRUE)</code>, or custom columns with <code><a href="reference/geom_forest_text.html">geom_forest_text()</a></code>.</li>
+<strong>Custom geometries</strong> — proper <code>ggproto</code> geoms for CIs, summary diamonds, prediction intervals, reference lines, and text columns.</li>
 <li>
 <strong>Journal styles</strong> — <code><a href="reference/layout_jama.html">layout_jama()</a></code>, <code><a href="reference/layout_bmj.html">layout_bmj()</a></code>, <code><a href="reference/layout_revman5.html">layout_revman5()</a></code>.</li>
 </ul>
@@ -146,6 +193,8 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/drhrf/ggmeta/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/drhrf/ggmeta/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/drhrf/ggmeta/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/drhrf/ggmeta/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 </ul>
 </div>
 
