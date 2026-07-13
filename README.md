@@ -157,4 +157,6 @@ ggforest(m) +
 ## Learn more
 
 - `vignette("getting-started")` — a tour of the package.
+- `vignette("customising")` — restyle every element of a forest or
+  funnel plot.
 - `vignette("from-meta-forest")` — coming from `meta::forest()`.

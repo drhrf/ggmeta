@@ -3,11 +3,10 @@ template:
   bootstrap: 5
   bootswatch: flatly
 articles:
-  - title: "Get started"
+  - title: "Guides"
     contents:
       - getting-started
-  - title: "Migration"
-    contents:
+      - customising
       - from-meta-forest
 reference:
   - title: "Main functions"

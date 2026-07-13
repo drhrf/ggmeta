@@ -15,7 +15,7 @@ Description: A 'ggplot2' extension that creates publication-quality forest
     back-transformation of ratio measures, and journal-specific layout
     presets (JAMA, BMJ, RevMan5).
 License: GPL (>= 3)
-URL: https://github.com/drhrf/ggmeta
+URL: https://github.com/drhrf/ggmeta, https://drhrf.github.io/ggmeta/
 BugReports: https://github.com/drhrf/ggmeta/issues
 Depends: R (>= 4.0)
 Imports:

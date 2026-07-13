@@ -37,6 +37,7 @@ suitable for use with ggmeta geoms or direct ggplot2 plotting.
 Useful links:
 \itemize{
   \item \url{https://github.com/drhrf/ggmeta}
+  \item \url{https://drhrf.github.io/ggmeta/}
   \item Report bugs at \url{https://github.com/drhrf/ggmeta/issues}
 }
 
