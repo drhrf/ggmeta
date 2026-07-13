@@ -39,8 +39,9 @@ effect, default) or \code{"random"}.}
 \item{centre}{Effect the funnel is centred on. Defaults to the
 inverse-variance (common-effect) estimate of the supplied studies.}
 
-\item{sm}{Summary measure (e.g. \code{"RR"}), used to label the x-axis and, for
-ratio measures, to show back-transformed axis labels. Optional.}
+\item{sm}{Summary measure (e.g. \code{"RR"}, \code{"PLOGIT"}), used to label the x-axis
+and, for transformed measures (ratios, proportions, rates, correlations),
+to show back-transformed axis labels. Optional.}
 
 \item{xlab, ylab}{Axis labels. \code{ylab} defaults to \code{"Standard error"}.}
 

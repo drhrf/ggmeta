@@ -4,10 +4,12 @@
 
 * New `ggfunnel()` draws a funnel plot (study effect vs. standard error with
   pseudo confidence-interval contours) from a `meta` object or a tidy data
-  frame, returning an ordinary `ggplot`. Because both `ggforest()` and
-  `ggfunnel()` are ggplots, a forest and funnel plot compose on one canvas with
-  \pkg{patchwork} — e.g. `ggforest(m) / ggfunnel(m)`. Comes with
-  `geom_funnel_contour()` and `theme_funnel()`.
+  frame, returning an ordinary `ggplot`. Ratio, proportion, rate, and
+  correlation measures are drawn on their analysis scale but labelled with
+  back-transformed values. Because both `ggforest()` and `ggfunnel()` are
+  ggplots, a forest and funnel plot compose on one canvas with \pkg{patchwork}
+  — e.g. `ggforest(m) | ggfunnel(m)`. Comes with `geom_funnel_contour()` and
+  `theme_funnel()`.
 * `ggforest()` gains `columns` to draw a `meta::forest()`-style table of text
   columns (effect estimate, 95% CI, weight) with headers to the right of the
   plot: `ggforest(m, columns = TRUE)`, or a subset such as

@@ -99,10 +99,11 @@ ordinary `ggplot`, a forest and a funnel compose on a single figure with
 [patchwork](https://patchwork.data-imaginist.com) — something that is awkward
 with `meta`'s base-graphics output:
 
-```{r patchwork, eval = has_meta, fig.width = 8, fig.height = 8}
+```{r patchwork, eval = has_meta, fig.width = 11, fig.height = 4.6}
 library(patchwork)
 
-ggforest(m) / ggfunnel(m) +
+(ggforest(m) | ggfunnel(m)) +
+  plot_layout(widths = c(2, 1)) +
   plot_annotation(tag_levels = "A")
 ```
 

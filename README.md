@@ -98,7 +98,8 @@ awkward with `meta`’s base-graphics output:
 ``` r
 library(patchwork)
 
-ggforest(m) / ggfunnel(m) +
+(ggforest(m) | ggfunnel(m)) +
+  plot_layout(widths = c(2, 1)) +
   plot_annotation(tag_levels = "A")
 ```
 

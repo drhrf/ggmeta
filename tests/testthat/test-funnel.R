@@ -60,3 +60,30 @@ test_that("ggfunnel plots on the analysis scale for both ratio and difference me
   expect_no_error(ggplot2::ggplot_build(ggfunnel(rr)))
   expect_no_error(ggplot2::ggplot_build(ggfunnel(md)))
 })
+
+test_that("funnel x-axis shows back-transformed labels for proportions and correlations", {
+  skip_if_not_installed("meta")
+
+  axis_labels <- function(p) {
+    s <- ggplot2::ggplot_build(p)$layout$panel_params[[1]]$x
+    as.numeric(stats::na.omit(s$get_labels()))
+  }
+
+  mp <- meta::metaprop(
+    event = c(15, 20, 12, 25, 18, 9), n = c(50, 60, 55, 70, 65, 40),
+    studlab = paste0("S", 1:6), sm = "PLOGIT"
+  )
+  mc <- meta::metacor(
+    cor = c(0.5, 0.6, 0.55, 0.42, 0.38, 0.62), n = c(50, 60, 55, 80, 70, 45),
+    studlab = paste0("S", 1:6)
+  )
+
+  # Proportions are back-transformed into (0, 1) -- not the logit scale, whose
+  # labels for these data would run well past 1.
+  pl <- axis_labels(ggfunnel(mp))
+  expect_true(length(pl) >= 2 && all(pl > 0 & pl < 1))
+
+  # Correlations back-transformed from Fisher's z stay within [-1, 1].
+  cl <- axis_labels(ggfunnel(mc))
+  expect_true(length(cl) >= 2 && all(abs(cl) <= 1))
+})

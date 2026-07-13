@@ -71,8 +71,9 @@ ggfunnel.meta <- function(x, ..., ref = c("common", "random"), level = 0.95) {
 #'
 #' @param centre Effect the funnel is centred on. Defaults to the
 #'   inverse-variance (common-effect) estimate of the supplied studies.
-#' @param sm Summary measure (e.g. `"RR"`), used to label the x-axis and, for
-#'   ratio measures, to show back-transformed axis labels. Optional.
+#' @param sm Summary measure (e.g. `"RR"`, `"PLOGIT"`), used to label the x-axis
+#'   and, for transformed measures (ratios, proportions, rates, correlations),
+#'   to show back-transformed axis labels. Optional.
 #' @param xlab,ylab Axis labels. `ylab` defaults to `"Standard error"`.
 #' @param title Plot title. Default `NULL`.
 ggfunnel.data.frame <- function(x,
@@ -123,20 +124,53 @@ ggfunnel.data.frame <- function(x,
     labs(x = xlab, y = ylab, title = title) +
     theme_funnel()
 
-  # Ratio measures are analysed on the log scale; keep the funnel straight by
-  # plotting on that scale but labelling the axis with back-transformed values.
-  ratio <- !is.null(sm) && isTRUE(detect_null_effect(sm) == 1)
-  if (ratio) {
-    lo <- centre - z_max * se_max
-    hi <- centre + z_max * se_max
-    ratios <- scales::breaks_log()(exp(c(lo, hi)))
-    ratios <- ratios[ratios > 0 & log(ratios) >= lo & log(ratios) <= hi]
-    if (length(ratios) >= 2) {
-      p <- p + scale_x_continuous(breaks = log(ratios), labels = ratios)
-    }
+  # Transformed measures (ratios, proportions, rates, correlations) are analysed
+  # on a transformed scale; keep the funnel straight by plotting on that scale
+  # but labelling the axis with back-transformed values.
+  sc <- funnel_x_scale(
+    sm, c(centre - z_max * se_max, centre + z_max * se_max),
+    x_obs = d$estimate
+  )
+  if (!is.null(sc)) {
+    p <- p + scale_x_continuous(breaks = sc$breaks, labels = sc$labels)
   }
 
   p
+}
+
+#' Back-transformed x-axis breaks for a funnel plot
+#'
+#' For a transformed summary measure, picks nice breaks in the natural
+#' (back-transformed) space and maps them to analysis-scale positions via
+#' [meta::backtransf()], so a funnel plotted on the analysis scale shows readable
+#' axis labels (risk ratios, proportions, rates, correlations). Returns `NULL`
+#' for linear measures (MD, SMD, RD, raw means) and when `meta` is unavailable.
+#' @noRd
+funnel_x_scale <- function(sm, rng, x_obs = numeric(0)) {
+  if (is.null(sm)) return(NULL)
+  transformed <- c(.ratio_measures, .prop_measures, .rate_measures, "ZCOR")
+  if (!(sm %in% transformed) || !requireNamespace("meta", quietly = TRUE)) {
+    return(NULL)
+  }
+
+  rng <- range(c(rng, x_obs), na.rm = TRUE)
+  grid_a <- seq(rng[1], rng[2], length.out = 512L)
+  grid_o <- suppressWarnings(meta::backtransf(grid_a, sm = sm))
+  ok <- is.finite(grid_a) & is.finite(grid_o)
+  grid_a <- grid_a[ok]
+  grid_o <- grid_o[ok]
+  if (length(grid_o) < 2L || diff(range(grid_o)) <= 0) return(NULL)
+
+  o_range  <- range(grid_o)
+  log_like <- sm %in% c(.ratio_measures, .rate_measures)
+  breaks_o <- if (log_like) scales::breaks_log()(o_range) else pretty(o_range)
+  breaks_o <- breaks_o[breaks_o >= o_range[1] & breaks_o <= o_range[2]]
+  if (length(breaks_o) < 2L) return(NULL)
+
+  breaks_a <- suppressWarnings(stats::approx(grid_o, grid_a, xout = breaks_o)$y)
+  keep <- is.finite(breaks_a)
+  if (sum(keep) < 2L) return(NULL)
+  list(breaks = breaks_a[keep], labels = breaks_o[keep])
 }
 
 #' Funnel plot theme
