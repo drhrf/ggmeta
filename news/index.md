@@ -4,6 +4,19 @@
 
 ### New features
 
+- New
+  [`ggfunnel()`](https://drhrf.github.io/ggmeta/reference/ggfunnel.md)
+  draws a funnel plot (study effect vs. standard error with pseudo
+  confidence-interval contours) from a `meta` object or a tidy data
+  frame, returning an ordinary `ggplot`. Because both
+  [`ggforest()`](https://drhrf.github.io/ggmeta/reference/ggforest.md)
+  and
+  [`ggfunnel()`](https://drhrf.github.io/ggmeta/reference/ggfunnel.md)
+  are ggplots, a forest and funnel plot compose on one canvas with —
+  e.g. `ggforest(m) / ggfunnel(m)`. Comes with
+  [`geom_funnel_contour()`](https://drhrf.github.io/ggmeta/reference/geom_funnel_contour.md)
+  and
+  [`theme_funnel()`](https://drhrf.github.io/ggmeta/reference/theme_funnel.md).
 - [`ggforest()`](https://drhrf.github.io/ggmeta/reference/ggforest.md)
   gains `columns` to draw a
   [`meta::forest()`](https://wviechtb.github.io/metafor/reference/forest.html)-style

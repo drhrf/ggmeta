@@ -1,6 +1,6 @@
 # ggmeta
 
-**ggmeta** builds publication-quality forest plots with
+**ggmeta** builds publication-quality forest and funnel plots with
 [ggplot2](https://ggplot2.tidyverse.org). Give it a `meta` object (from
 the [meta](https://cran.r-project.org/package=meta) package) or a plain
 tidy data frame — the result is an ordinary `ggplot` you can theme,
@@ -80,6 +80,26 @@ ggforest(m, show_predict  = FALSE)          # hide the prediction interval
 ggforest(m, sort_studies  = FALSE)          # keep the input order
 ```
 
+## Forest *and* funnel plots on one canvas
+
+`ggmeta` also draws funnel plots with
+[`ggfunnel()`](https://drhrf.github.io/ggmeta/reference/ggfunnel.md)
+(study effect vs. standard error, with pseudo confidence-interval
+contours). And because every plot is an ordinary `ggplot`, a forest and
+a funnel compose on a single figure with
+[patchwork](https://patchwork.data-imaginist.com) — something that is
+awkward with `meta`’s base-graphics output:
+
+``` r
+
+library(patchwork)
+
+ggforest(m) / ggfunnel(m) +
+  plot_annotation(tag_levels = "A")
+```
+
+![](reference/figures/README-patchwork-1.png)
+
 ## Journal styles
 
 Layout presets restyle a plot for common journals. They are ordinary
@@ -124,6 +144,12 @@ ggforest(m) +
 
 - **ggplot2 native** — add themes, layers, annotations, and facets; save
   with `ggsave()`.
+- **Forest and funnel plots** —
+  [`ggforest()`](https://drhrf.github.io/ggmeta/reference/ggforest.md)
+  and
+  [`ggfunnel()`](https://drhrf.github.io/ggmeta/reference/ggfunnel.md),
+  both ordinary ggplots, so you can arrange them together with
+  patchwork.
 - **[`meta::forest()`](https://wviechtb.github.io/metafor/reference/forest.html)-style
   tables** — estimate / CI / weight columns and a heterogeneity caption,
   via `columns = TRUE`.
