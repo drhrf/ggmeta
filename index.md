@@ -170,6 +170,8 @@ ggforest(m) +
 
 - [`vignette("getting-started")`](https://drhrf.github.io/ggmeta/articles/getting-started.md)
   — a tour of the package.
+- [`vignette("customising")`](https://drhrf.github.io/ggmeta/articles/customising.md)
+  — restyle every element of a forest or funnel plot.
 - [`vignette("from-meta-forest")`](https://drhrf.github.io/ggmeta/articles/from-meta-forest.md)
   — coming from
   [`meta::forest()`](https://wviechtb.github.io/metafor/reference/forest.html).
