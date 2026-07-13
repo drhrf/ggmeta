@@ -10,9 +10,10 @@ articles:
     contents:
       - from-meta-forest
 reference:
-  - title: "Main function"
+  - title: "Main functions"
     contents:
       - ggforest
+      - ggfunnel
   - title: "Data conversion"
     contents:
       - tidy_meta
@@ -24,12 +25,14 @@ reference:
       - geom_forest_ref
       - geom_forest_predict
       - geom_forest_text
+      - geom_funnel_contour
   - title: "Text helpers"
     contents:
       - format_effect
-  - title: "Theme and layouts"
+  - title: "Themes and layouts"
     contents:
       - theme_forest
+      - theme_funnel
       - layout_jama
       - layout_bmj
       - layout_revman5
