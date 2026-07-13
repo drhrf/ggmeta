@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggmeta</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,34 +34,30 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0.9000" id="ggmeta-0109000">ggmeta 0.1.0.9000<a class="anchor" aria-label="anchor" href="#ggmeta-0109000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0" id="ggmeta-010">ggmeta 0.1.0<a class="anchor" aria-label="anchor" href="#ggmeta-010"></a></h2>
+<p>First CRAN release.</p>
+<p><code>ggmeta</code> extends ‘ggplot2’ to build publication-quality forest and funnel plots from <code>meta</code> objects or tidy data frames. Every plot is an ordinary <code>ggplot</code>, so it can be themed, composed (for example a forest and a funnel plot side by side with patchwork), and saved like any other.</p>
 <div class="section level3">
-<h3 id="new-features-0-1-0-9000">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-0-9000"></a></h3>
+<h3 id="forest-plots-0-1-0">Forest plots<a class="anchor" aria-label="anchor" href="#forest-plots-0-1-0"></a></h3>
 <ul><li>
-<code><a href="../reference/ggforest.html">ggforest()</a></code> and <code><a href="../reference/ggfunnel.html">ggfunnel()</a></code> gain per-element styling arguments, so the built-in layers can be restyled directly. <code><a href="../reference/ggforest.html">ggforest()</a></code> takes <code>ci_args</code>, <code>diamond_args</code>, <code>diamond_colours</code>, <code>predict_args</code>, <code>ref_args</code>, <code>consensus</code>, and <code>consensus_args</code>; <code><a href="../reference/ggfunnel.html">ggfunnel()</a></code> takes <code>point_args</code>, <code>contour_args</code>, and <code>ref_args</code>. For example <code>ggforest(m, predict_args = list(cap_width = 0.1, colour = "red"))</code> or <code>ggforest(m, diamond_colours = c(random = "steelblue"))</code>. Previously the only way to reach these layers was to add another <code>geom_forest_*()</code>, which drew a <em>second</em> layer over every row instead of restyling the built-in one.</li>
-<li>New <code><a href="../reference/ggfunnel.html">ggfunnel()</a></code> draws a funnel plot (study effect vs. standard error with pseudo confidence-interval contours) from a <code>meta</code> object or a tidy data frame, returning an ordinary <code>ggplot</code>. Ratio, proportion, rate, and correlation measures are drawn on their analysis scale but labelled with back-transformed values. Because both <code><a href="../reference/ggforest.html">ggforest()</a></code> and <code><a href="../reference/ggfunnel.html">ggfunnel()</a></code> are ggplots, a forest and funnel plot compose on one canvas with  — e.g. <code>ggforest(m) | ggfunnel(m)</code>. Comes with <code><a href="../reference/geom_funnel_contour.html">geom_funnel_contour()</a></code> and <code><a href="../reference/theme_funnel.html">theme_funnel()</a></code>.</li>
+<code><a href="../reference/ggforest.html">ggforest()</a></code> draws a forest plot from a <code>meta</code> object or a tidy data frame, with study confidence intervals and weight-proportional squares, common- and random-effects summary diamonds, prediction intervals, and null-effect and consensus reference lines.</li>
 <li>
-<code><a href="../reference/ggforest.html">ggforest()</a></code> gains <code>columns</code> to draw a <code><a href="https://wviechtb.github.io/metafor/reference/forest.html" class="external-link">meta::forest()</a></code>-style table of text columns (effect estimate, 95% CI, weight) with headers to the right of the plot: <code>ggforest(m, columns = TRUE)</code>, or a subset such as <code>columns = c("estimate", "ci")</code>. The estimate header can be set with <code>effect_header</code>. Positions are computed in the axis’s own space, so columns line up on both linear and log (ratio) axes.</li>
+<code>columns = TRUE</code> adds a <code><a href="https://wviechtb.github.io/metafor/reference/forest.html" class="external-link">meta::forest()</a></code>-style table of effect-estimate, 95% CI, and weight columns (or a chosen subset), aligned on both linear and log axes.</li>
 <li>
-<code><a href="../reference/ggforest.html">ggforest()</a></code> and <code><a href="../reference/tidy_meta.html">tidy_meta()</a></code> gain <code>add_summary</code> (with <code>summary_method</code> and <code>level</code>) to pool a tidy data frame of effect sizes on the fly — an inverse-variance common effect and a DerSimonian–Laird random effect — so a summary diamond can be drawn without the <strong>meta</strong> package.</li>
-<li>New <code><a href="../reference/geom_forest_text.html">geom_forest_text()</a></code> adds a custom text column aligned with the study rows, plus <code><a href="../reference/format_effect.html">format_effect()</a></code> to build <code>"estimate (low to high)"</code> labels.</li>
+<code>add_summary = TRUE</code> pools a tidy data frame of effect sizes on the fly (inverse-variance common effect and DerSimonian-Laird random effects), so a summary diamond can be drawn without the <code>meta</code> package.</li>
+<li>Journal presets <code><a href="../reference/layout_jama.html">layout_jama()</a></code>, <code><a href="../reference/layout_bmj.html">layout_bmj()</a></code>, and <code><a href="../reference/layout_revman5.html">layout_revman5()</a></code>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="improvements-0-1-0-9000">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-1-0-9000"></a></h3>
-<ul><li>Refreshed default look: a solid null-effect line with a dotted “consensus” line at the pooled estimate (as in <code><a href="https://wviechtb.github.io/metafor/reference/forest.html" class="external-link">meta::forest()</a></code>), terracotta / dark-blue summary diamonds, no panel gridlines, and (with <code>columns</code>) bold headers and an x-axis title centred under the plot region.</li>
-<li>Summary-diamond legends now read “Common effect” / “Random effects” / “Subgroup (common)” / “Subgroup (random)” instead of raw keys, and the non-informative square-size legend is hidden.</li>
-<li>Getting-started and “Coming from <code><a href="https://wviechtb.github.io/metafor/reference/forest.html" class="external-link">meta::forest()</a></code>” vignettes added.</li>
+<h3 id="funnel-plots-0-1-0">Funnel plots<a class="anchor" aria-label="anchor" href="#funnel-plots-0-1-0"></a></h3>
+<ul><li>
+<code><a href="../reference/ggfunnel.html">ggfunnel()</a></code> draws a funnel plot (study effect against standard error) with pseudo confidence-interval contours, from a <code>meta</code> object or a tidy data frame. Ratio, proportion, rate, and correlation measures are drawn on their analysis scale but labelled with back-transformed values.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-0-1-0-9000">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-0-9000"></a></h3>
-<ul><li>
-<code><a href="../reference/geom_forest_ref.html">geom_forest_ref()</a></code> now maps its intercept through the x-axis transformation, so the null-effect and consensus lines land at the correct place on ratio (log) axes — previously the null line for <code>RR</code>/<code>OR</code>/<code>HR</code> rendered at ten times the intended value.</li>
-<li>Back-transformation delegates to <code><a href="https://rdrr.io/pkg/meta/man/meta-transf.html" class="external-link">meta::backtransf()</a></code>, so every summary measure gets its correct inverse (inverse-logit for <code>PLOGIT</code>, arcsine for <code>PAS</code>, Fisher’s <em>z</em> for <code>ZCOR</code>, exp for rates such as <code>IRLN</code>). Previously proportions, rates, and correlations were exponentiated incorrectly.</li>
-<li>Single-group proportions and rates no longer draw a null-effect reference line or a log x-axis (<code>detect_null_effect()</code> now returns <code>NA</code> for them).</li>
-<li>Subgroup forest plots keep each study grouped under its subgroup header, and headers render as plain text instead of literal <code>**markdown**</code>.</li>
-<li>Study confidence intervals are no longer dropped for object types whose weights are unavailable (e.g. <code>metaprop</code>, <code>metarate</code>); weights fall back to the inverse variance and <code>weight</code> is no longer a required aesthetic.</li>
-<li>Forest plots use a stable, conventional orientation (studies on top, summary diamond at the bottom) regardless of which optional layers are present.</li>
-<li>The heterogeneity caption is drawn as a plotmath expression, fixing an example-rendering error under non-UTF-8 graphics devices.</li>
+<h3 id="building-blocks-and-customisation-0-1-0">Building blocks and customisation<a class="anchor" aria-label="anchor" href="#building-blocks-and-customisation-0-1-0"></a></h3>
+<ul><li>Composable geometries: <code><a href="../reference/geom_forest_ci.html">geom_forest_ci()</a></code>, <code><a href="../reference/geom_forest_diamond.html">geom_forest_diamond()</a></code>, <code><a href="../reference/geom_forest_ref.html">geom_forest_ref()</a></code>, <code><a href="../reference/geom_forest_predict.html">geom_forest_predict()</a></code>, <code><a href="../reference/geom_forest_text.html">geom_forest_text()</a></code>, and <code><a href="../reference/geom_funnel_contour.html">geom_funnel_contour()</a></code>; helpers <code><a href="../reference/tidy_meta.html">tidy_meta()</a></code>, <code><a href="../reference/fortify.meta.html">fortify.meta()</a></code>, and <code><a href="../reference/format_effect.html">format_effect()</a></code>; themes <code><a href="../reference/theme_forest.html">theme_forest()</a></code> and <code><a href="../reference/theme_funnel.html">theme_funnel()</a></code>.</li>
+<li>
+<code><a href="../reference/ggforest.html">ggforest()</a></code> and <code><a href="../reference/ggfunnel.html">ggfunnel()</a></code> take per-element styling arguments (for example <code>predict_args</code>, <code>diamond_colours</code>, <code>ci_args</code>, <code>ref_args</code>, <code>point_args</code>, <code>contour_args</code>) to restyle any built-in layer.</li>
+<li>Every summary measure is back-transformed with its correct inverse (exponentiation for ratios, inverse-logit for logit proportions, Fisher’s <em>z</em> for correlations, and so on).</li>
 </ul></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

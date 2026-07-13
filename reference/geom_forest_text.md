@@ -134,6 +134,10 @@ geom_forest_text(
   `x`/`xmin`/`xmax`/`weight` mapping, so only `y` and `label` need to be
   supplied.
 
+## Value
+
+A ggplot2 layer.
+
 ## Aesthetics
 
 `geom_forest_text()` understands the following aesthetics (required

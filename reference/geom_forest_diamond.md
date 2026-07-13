@@ -120,6 +120,10 @@ geom_forest_diamond(
   plot specification, e.g.
   [`annotation_borders()`](https://ggplot2.tidyverse.org/reference/annotation_borders.html).
 
+## Value
+
+A ggplot2 layer.
+
 ## Aesthetics
 
 `geom_forest_diamond()` understands the following aesthetics (required

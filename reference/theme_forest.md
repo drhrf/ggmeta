@@ -33,6 +33,10 @@ theme_forest(
 
   Base rect size. Default: `base_size / 22`.
 
+## Value
+
+A ggplot2 theme object (a list of class `"theme"`).
+
 ## Examples
 
 ``` r
