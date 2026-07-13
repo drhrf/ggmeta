@@ -61,8 +61,9 @@ ggfunnel(
 
 - sm:
 
-  Summary measure (e.g. `"RR"`), used to label the x-axis and, for ratio
-  measures, to show back-transformed axis labels. Optional.
+  Summary measure (e.g. `"RR"`, `"PLOGIT"`), used to label the x-axis
+  and, for transformed measures (ratios, proportions, rates,
+  correlations), to show back-transformed axis labels. Optional.
 
 - xlab, ylab:
 
