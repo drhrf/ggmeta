@@ -23,6 +23,13 @@ reference:
       - geom_forest_diamond
       - geom_forest_ref
       - geom_forest_predict
-  - title: "Theme and layout"
+      - geom_forest_text
+  - title: "Text helpers"
+    contents:
+      - format_effect
+  - title: "Theme and layouts"
     contents:
       - theme_forest
+      - layout_jama
+      - layout_bmj
+      - layout_revman5

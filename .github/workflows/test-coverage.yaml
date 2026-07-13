@@ -28,14 +28,27 @@ jobs:
 
       - name: Test coverage
         run: |
-          covr::package_coverage() |>
-            covr::to_cobertura() |>
-            writeLines("cobertura.xml")
+          cov <- covr::package_coverage(
+            quiet = FALSE,
+            clean = FALSE,
+            install_path = file.path(normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"), "package")
+          )
+          print(cov)
+          covr::to_cobertura(cov)
         shell: Rscript {0}
 
       - uses: codecov/codecov-action@v5
         with:
-          fail_ci_if_error: ${{ github.event_name != 'pull_request' }}
+          # Best-effort upload: without a CODECOV_TOKEN repository secret the job
+          # still succeeds. Add the token (and set this to true) to enforce it.
+          fail_ci_if_error: false
           files: ./cobertura.xml
           plugins: noop
+          disable_search: true
           token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Show testthat output
+        if: always()
+        run: |
+          find '${{ runner.temp }}/package' -name 'testthat.Rout*' -exec cat '{}' \; || true
+        shell: bash
