@@ -1,0 +1,28 @@
+url: https://drhrf.github.io/ggmeta
+template:
+  bootstrap: 5
+  bootswatch: flatly
+articles:
+  - title: "Get started"
+    contents:
+      - getting-started
+  - title: "Migration"
+    contents:
+      - from-meta-forest
+reference:
+  - title: "Main function"
+    contents:
+      - ggforest
+  - title: "Data conversion"
+    contents:
+      - tidy_meta
+      - fortify.meta
+  - title: "Geometries"
+    contents:
+      - geom_forest_ci
+      - geom_forest_diamond
+      - geom_forest_ref
+      - geom_forest_predict
+  - title: "Theme and layout"
+    contents:
+      - theme_forest

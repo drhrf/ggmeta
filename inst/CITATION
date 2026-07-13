@@ -1,0 +1,10 @@
+citHeader("To cite ggmeta in publications use:")
+
+bibentry(
+  bibtype = "Manual",
+  title   = "ggmeta: Publication-Quality Forest Plots with 'ggplot2'",
+  author  = c(person(given = "Hercules R.", family = "Freitas")),
+  year    = "2026",
+  note    = "R package version 0.1.0.9000",
+  url     = "https://github.com/drhrf/ggmeta"
+)

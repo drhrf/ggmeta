@@ -1,0 +1,23 @@
+# R session / editor
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+.DS_Store
+
+# R build / check artifacts
+inst/doc
+/docs/
+*.tar.gz
+*.Rcheck/
+README.html
+Rplots.pdf
+
+# Local agent / editor settings
+.claude/
+
+# Internal notes not part of the package
+for_claude.md
+Developing_an_R_package.md
+Get_started_with_rcompendium.md
