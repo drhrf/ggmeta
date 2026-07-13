@@ -35,6 +35,13 @@ ggforest(x, ...)
   level = 0.95,
   columns = NULL,
   effect_header = NULL,
+  ci_args = list(),
+  diamond_args = list(),
+  diamond_colours = NULL,
+  predict_args = list(),
+  ref_args = list(),
+  consensus = TRUE,
+  consensus_args = list(),
   ...
 )
 }
@@ -88,6 +95,28 @@ draws no columns.}
 
 \item{effect_header}{Header for the estimate column (e.g. \code{"Hedges' g"}).
 Defaults to the summary measure (e.g. \code{"SMD"}, \code{"RR"}).}
+
+\item{ci_args, diamond_args, predict_args}{Lists of arguments used to restyle
+the study confidence intervals (\code{\link[=geom_forest_ci]{geom_forest_ci()}}), the summary diamonds
+(\code{\link[=geom_forest_diamond]{geom_forest_diamond()}}), and the prediction interval
+(\code{\link[=geom_forest_predict]{geom_forest_predict()}}). For example
+\code{predict_args = list(cap_width = 0.1, colour = "red")} or
+\code{ci_args = list(colour = "grey20", point_size_range = c(1, 5))}. This is the
+way to customise these elements: adding another \verb{geom_forest_*()} layer to a
+\code{ggforest()} plot draws a \emph{second} layer over every row rather than
+restyling the built-in one.}
+
+\item{diamond_colours}{Optional named colours for the summary diamonds,
+overriding the default palette. Names are \code{"common"}, \code{"random"},
+\code{"subgroup_common"}, and \code{"subgroup_random"}, e.g.
+\code{c(common = "black", random = "steelblue")}.}
+
+\item{ref_args, consensus_args}{Lists of arguments for the null-effect
+reference line and the dotted "consensus" line (both \code{\link[=geom_forest_ref]{geom_forest_ref()}}),
+e.g. \code{ref_args = list(linetype = "dashed", colour = "black")}.}
+
+\item{consensus}{Draw the dotted consensus line at the pooled estimate?
+Default \code{TRUE} (only shown alongside a null line).}
 }
 \value{
 A \code{ggplot} object. Add standard ggplot2 layers (themes,

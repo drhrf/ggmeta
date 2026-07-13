@@ -138,6 +138,24 @@ ggforest.meta <- function(
 #'   draws no columns.
 #' @param effect_header Header for the estimate column (e.g. `"Hedges' g"`).
 #'   Defaults to the summary measure (e.g. `"SMD"`, `"RR"`).
+#' @param ci_args,diamond_args,predict_args Lists of arguments used to restyle
+#'   the study confidence intervals ([geom_forest_ci()]), the summary diamonds
+#'   ([geom_forest_diamond()]), and the prediction interval
+#'   ([geom_forest_predict()]). For example
+#'   `predict_args = list(cap_width = 0.1, colour = "red")` or
+#'   `ci_args = list(colour = "grey20", point_size_range = c(1, 5))`. This is the
+#'   way to customise these elements: adding another `geom_forest_*()` layer to a
+#'   `ggforest()` plot draws a *second* layer over every row rather than
+#'   restyling the built-in one.
+#' @param diamond_colours Optional named colours for the summary diamonds,
+#'   overriding the default palette. Names are `"common"`, `"random"`,
+#'   `"subgroup_common"`, and `"subgroup_random"`, e.g.
+#'   `c(common = "black", random = "steelblue")`.
+#' @param ref_args,consensus_args Lists of arguments for the null-effect
+#'   reference line and the dotted "consensus" line (both [geom_forest_ref()]),
+#'   e.g. `ref_args = list(linetype = "dashed", colour = "black")`.
+#' @param consensus Draw the dotted consensus line at the pooled estimate?
+#'   Default `TRUE` (only shown alongside a null line).
 ggforest.data.frame <- function(
   x,
   null_effect = 0,
@@ -150,6 +168,13 @@ ggforest.data.frame <- function(
   level = 0.95,
   columns = NULL,
   effect_header = NULL,
+  ci_args = list(),
+  diamond_args = list(),
+  diamond_colours = NULL,
+  predict_args = list(),
+  ref_args = list(),
+  consensus = TRUE,
+  consensus_args = list(),
   ...
 ) {
   # Capture the summary measure (used for the estimate-column header) before any
@@ -237,16 +262,17 @@ ggforest.data.frame <- function(
   # there is no meaningful null, e.g. single-group proportions/rates).
   has_null <- !is.null(null_effect) && !is.na(null_effect)
   if (has_null) {
-    p <- p + geom_forest_ref(
-      xintercept = null_effect, linetype = "solid", colour = "grey30"
-    )
+    p <- p + do.call(geom_forest_ref, utils::modifyList(
+      list(xintercept = null_effect, linetype = "solid", colour = "grey30"),
+      ref_args
+    ))
   }
 
   # Dotted "consensus" line at the pooled estimate (random, else common), as in
   # meta::forest(), spanning the full height behind the studies. Only drawn
   # alongside a null line (two-group measures); single-group proportions/rates
   # stay free of reference lines.
-  consensus <- {
+  consensus_x <- {
     r  <- x$estimate[x$summary_type == "random"]
     c0 <- x$estimate[x$summary_type == "common"]
     if (length(r) && is.finite(r[1])) {
@@ -257,17 +283,20 @@ ggforest.data.frame <- function(
       NA_real_
     }
   }
-  if (has_null && is.finite(consensus)) {
-    p <- p + geom_forest_ref(
-      xintercept = consensus, linetype = "dotted", colour = "grey30"
-    )
+  if (isTRUE(consensus) && has_null && is.finite(consensus_x)) {
+    p <- p + do.call(geom_forest_ref, utils::modifyList(
+      list(xintercept = consensus_x, linetype = "dotted", colour = "grey30"),
+      consensus_args
+    ))
   }
 
   # Study-level CIs (skip rows where estimate is NA, like subgroup headers)
   if (nrow(study_rows) > 0) {
     valid_studies <- study_rows[!is.na(study_rows$estimate), , drop = FALSE]
     if (nrow(valid_studies) > 0) {
-      p <- p + geom_forest_ci(data = valid_studies)
+      p <- p + do.call(geom_forest_ci, utils::modifyList(
+        list(data = valid_studies), ci_args
+      ))
     }
   }
 
@@ -275,19 +304,27 @@ ggforest.data.frame <- function(
   # human-readable legend labels (the summary_type keys are e.g.
   # "subgroup_common").
   if (nrow(summary_rows) > 0) {
-    p <- p +
-      geom_forest_diamond(
-        data = summary_rows,
-        aes(fill = .data$summary_type),
-        alpha = 0.9
-      ) +
-      scale_fill_manual(
-        values = c(
-          common          = "#BF5B3E",
-          random          = "#264B63",
-          subgroup_common = "#D79A82",
-          subgroup_random = "#7C9DB8"
-        ),
+    # Fill is mapped to summary_type and coloured by the palette below. If the
+    # caller sets a constant `fill` via diamond_args, drop the mapping + scale.
+    use_fill_aes <- !("fill" %in% names(diamond_args))
+    d_args <- list(data = summary_rows, alpha = 0.9)
+    if (use_fill_aes) {
+      d_args$mapping <- aes(fill = .data$summary_type)
+    }
+    p <- p + do.call(geom_forest_diamond, utils::modifyList(d_args, diamond_args))
+
+    if (use_fill_aes) {
+      fill_values <- c(
+        common          = "#BF5B3E",
+        random          = "#264B63",
+        subgroup_common = "#D79A82",
+        subgroup_random = "#7C9DB8"
+      )
+      if (!is.null(diamond_colours)) {
+        fill_values[names(diamond_colours)] <- diamond_colours
+      }
+      p <- p + scale_fill_manual(
+        values = fill_values,
         labels = c(
           common          = "Common effect",
           random          = "Random effects",
@@ -295,11 +332,14 @@ ggforest.data.frame <- function(
           subgroup_random = "Subgroup (random)"
         )
       )
+    }
   }
 
   # Prediction interval
   if (nrow(predict_rows) > 0) {
-    p <- p + geom_forest_predict(data = predict_rows)
+    p <- p + do.call(geom_forest_predict, utils::modifyList(
+      list(data = predict_rows), predict_args
+    ))
   }
 
   # Table columns (effect / CI / weight) to the right of the plot, plus the

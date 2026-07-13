@@ -76,6 +76,12 @@ ggfunnel.meta <- function(x, ..., ref = c("common", "random"), level = 0.95) {
 #'   to show back-transformed axis labels. Optional.
 #' @param xlab,ylab Axis labels. `ylab` defaults to `"Standard error"`.
 #' @param title Plot title. Default `NULL`.
+#' @param point_args,contour_args,ref_args Lists of arguments used to restyle
+#'   the study points ([ggplot2::geom_point()]), the funnel contours
+#'   ([geom_funnel_contour()]), and the vertical reference line
+#'   ([ggplot2::geom_vline()]). For example
+#'   `point_args = list(size = 3, fill = "black")` or
+#'   `contour_args = list(colour = "grey70", linetype = "dotted")`.
 ggfunnel.data.frame <- function(x,
                                 centre = NULL,
                                 sm = NULL,
@@ -83,6 +89,9 @@ ggfunnel.data.frame <- function(x,
                                 xlab = NULL,
                                 ylab = "Standard error",
                                 title = NULL,
+                                point_args = list(),
+                                contour_args = list(),
+                                ref_args = list(),
                                 ...) {
   if (is.null(sm)) sm <- attr(x, "sm")
 
@@ -114,12 +123,19 @@ ggfunnel.data.frame <- function(x,
   }
 
   p <- ggplot(d, aes(x = .data$estimate, y = .data$se)) +
-    geom_funnel_contour(centre = centre, se_max = se_max, level = level) +
-    geom_vline(xintercept = centre, colour = "grey30", linewidth = 0.5) +
-    geom_point(
-      shape = 21, fill = "#264B63", colour = "white",
-      size = 2.6, stroke = 0.6, alpha = 0.9
-    ) +
+    do.call(geom_funnel_contour, utils::modifyList(
+      list(centre = centre, se_max = se_max, level = level), contour_args
+    )) +
+    do.call(geom_vline, utils::modifyList(
+      list(xintercept = centre, colour = "grey30", linewidth = 0.5), ref_args
+    )) +
+    do.call(geom_point, utils::modifyList(
+      list(
+        shape = 21, fill = "#264B63", colour = "white",
+        size = 2.6, stroke = 0.6, alpha = 0.9
+      ),
+      point_args
+    )) +
     scale_y_reverse() +
     labs(x = xlab, y = ylab, title = title) +
     theme_funnel()

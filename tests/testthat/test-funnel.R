@@ -61,6 +61,23 @@ test_that("ggfunnel plots on the analysis scale for both ratio and difference me
   expect_no_error(ggplot2::ggplot_build(ggfunnel(md)))
 })
 
+test_that("ggfunnel graphical elements can be restyled via *_args", {
+  skip_if_not_installed("meta")
+
+  m <- meta::metagen(
+    TE = c(-0.4, 0.1, -0.2, -0.3), seTE = c(0.10, 0.30, 0.15, 0.22), sm = "RR"
+  )
+  p <- ggfunnel(m,
+    point_args = list(size = 3.5, shape = 16),
+    contour_args = list(colour = "grey70", linetype = "dotted"),
+    ref_args = list(colour = "red")
+  )
+  expect_no_error(ggplot2::ggplot_build(p))
+
+  pt <- p$layers[[which(vapply(p$layers, function(l) class(l$geom)[1], "") == "GeomPoint")]]
+  expect_equal(c(pt$aes_params, pt$geom_params)$size, 3.5)
+})
+
 test_that("funnel x-axis shows back-transformed labels for proportions and correlations", {
   skip_if_not_installed("meta")
 

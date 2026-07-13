@@ -21,6 +21,9 @@ ggfunnel(x, ...)
   xlab = NULL,
   ylab = "Standard error",
   title = NULL,
+  point_args = list(),
+  contour_args = list(),
+  ref_args = list(),
   ...
 )
 }
@@ -46,6 +49,13 @@ to show back-transformed axis labels. Optional.}
 \item{xlab, ylab}{Axis labels. \code{ylab} defaults to \code{"Standard error"}.}
 
 \item{title}{Plot title. Default \code{NULL}.}
+
+\item{point_args, contour_args, ref_args}{Lists of arguments used to restyle
+the study points (\code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}), the funnel contours
+(\code{\link[=geom_funnel_contour]{geom_funnel_contour()}}), and the vertical reference line
+(\code{\link[ggplot2:geom_vline]{ggplot2::geom_vline()}}). For example
+\code{point_args = list(size = 3, fill = "black")} or
+\code{contour_args = list(colour = "grey70", linetype = "dotted")}.}
 }
 \value{
 A \code{ggplot} object.
