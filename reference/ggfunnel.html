@@ -72,6 +72,9 @@ plot compose on one canvas with, for example, <span class="pkg">patchwork</span>
 <span>  xlab <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ylab <span class="op">=</span> <span class="st">"Standard error"</span>,</span>
 <span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  point_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  contour_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  ref_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -116,6 +119,15 @@ to show back-transformed axis labels. Optional.</p></dd>
 
 <dt id="arg-title">title<a class="anchor" aria-label="anchor" href="#arg-title"></a></dt>
 <dd><p>Plot title. Default <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-point-args-contour-args-ref-args">point_args, contour_args, ref_args<a class="anchor" aria-label="anchor" href="#arg-point-args-contour-args-ref-args"></a></dt>
+<dd><p>Lists of arguments used to restyle
+the study points (<code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">ggplot2::geom_point()</a></code>), the funnel contours
+(<code><a href="geom_funnel_contour.html">geom_funnel_contour()</a></code>), and the vertical reference line
+(<code><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">ggplot2::geom_vline()</a></code>). For example
+<code>point_args = list(size = 3, fill = "black")</code> or
+<code>contour_args = list(colour = "grey70", linetype = "dotted")</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

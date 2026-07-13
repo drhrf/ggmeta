@@ -80,6 +80,13 @@ Accepts a <span class="pkg">meta</span> object (created by <code><a href="https:
 <span>  level <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  columns <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  effect_header <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ci_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  diamond_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  diamond_colours <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predict_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  ref_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  consensus <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  consensus_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -170,6 +177,36 @@ draws no columns.</p></dd>
 <dt id="arg-effect-header">effect_header<a class="anchor" aria-label="anchor" href="#arg-effect-header"></a></dt>
 <dd><p>Header for the estimate column (e.g. <code>"Hedges' g"</code>).
 Defaults to the summary measure (e.g. <code>"SMD"</code>, <code>"RR"</code>).</p></dd>
+
+
+<dt id="arg-ci-args-diamond-args-predict-args">ci_args, diamond_args, predict_args<a class="anchor" aria-label="anchor" href="#arg-ci-args-diamond-args-predict-args"></a></dt>
+<dd><p>Lists of arguments used to restyle
+the study confidence intervals (<code><a href="geom_forest_ci.html">geom_forest_ci()</a></code>), the summary diamonds
+(<code><a href="geom_forest_diamond.html">geom_forest_diamond()</a></code>), and the prediction interval
+(<code><a href="geom_forest_predict.html">geom_forest_predict()</a></code>). For example
+<code>predict_args = list(cap_width = 0.1, colour = "red")</code> or
+<code>ci_args = list(colour = "grey20", point_size_range = c(1, 5))</code>. This is the
+way to customise these elements: adding another <code>geom_forest_*()</code> layer to a
+<code>ggforest()</code> plot draws a <em>second</em> layer over every row rather than
+restyling the built-in one.</p></dd>
+
+
+<dt id="arg-diamond-colours">diamond_colours<a class="anchor" aria-label="anchor" href="#arg-diamond-colours"></a></dt>
+<dd><p>Optional named colours for the summary diamonds,
+overriding the default palette. Names are <code>"common"</code>, <code>"random"</code>,
+<code>"subgroup_common"</code>, and <code>"subgroup_random"</code>, e.g.
+<code>c(common = "black", random = "steelblue")</code>.</p></dd>
+
+
+<dt id="arg-ref-args-consensus-args">ref_args, consensus_args<a class="anchor" aria-label="anchor" href="#arg-ref-args-consensus-args"></a></dt>
+<dd><p>Lists of arguments for the null-effect
+reference line and the dotted "consensus" line (both <code><a href="geom_forest_ref.html">geom_forest_ref()</a></code>),
+e.g. <code>ref_args = list(linetype = "dashed", colour = "black")</code>.</p></dd>
+
+
+<dt id="arg-consensus">consensus<a class="anchor" aria-label="anchor" href="#arg-consensus"></a></dt>
+<dd><p>Draw the dotted consensus line at the pooled estimate?
+Default <code>TRUE</code> (only shown alongside a null line).</p></dd>
 
 </dl></div>
     <div class="section level2">

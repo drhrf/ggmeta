@@ -42,6 +42,13 @@ ggforest(
   level = 0.95,
   columns = NULL,
   effect_header = NULL,
+  ci_args = list(),
+  diamond_args = list(),
+  diamond_colours = NULL,
+  predict_args = list(),
+  ref_args = list(),
+  consensus = TRUE,
+  consensus_args = list(),
   ...
 )
 ```
@@ -129,6 +136,39 @@ ggforest(
 
   Header for the estimate column (e.g. `"Hedges' g"`). Defaults to the
   summary measure (e.g. `"SMD"`, `"RR"`).
+
+- ci_args, diamond_args, predict_args:
+
+  Lists of arguments used to restyle the study confidence intervals
+  ([`geom_forest_ci()`](https://drhrf.github.io/ggmeta/reference/geom_forest_ci.md)),
+  the summary diamonds
+  ([`geom_forest_diamond()`](https://drhrf.github.io/ggmeta/reference/geom_forest_diamond.md)),
+  and the prediction interval
+  ([`geom_forest_predict()`](https://drhrf.github.io/ggmeta/reference/geom_forest_predict.md)).
+  For example `predict_args = list(cap_width = 0.1, colour = "red")` or
+  `ci_args = list(colour = "grey20", point_size_range = c(1, 5))`. This
+  is the way to customise these elements: adding another
+  `geom_forest_*()` layer to a `ggforest()` plot draws a *second* layer
+  over every row rather than restyling the built-in one.
+
+- diamond_colours:
+
+  Optional named colours for the summary diamonds, overriding the
+  default palette. Names are `"common"`, `"random"`,
+  `"subgroup_common"`, and `"subgroup_random"`, e.g.
+  `c(common = "black", random = "steelblue")`.
+
+- ref_args, consensus_args:
+
+  Lists of arguments for the null-effect reference line and the dotted
+  "consensus" line (both
+  [`geom_forest_ref()`](https://drhrf.github.io/ggmeta/reference/geom_forest_ref.md)),
+  e.g. `ref_args = list(linetype = "dashed", colour = "black")`.
+
+- consensus:
+
+  Draw the dotted consensus line at the pooled estimate? Default `TRUE`
+  (only shown alongside a null line).
 
 ## Value
 

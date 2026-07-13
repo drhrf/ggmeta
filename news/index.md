@@ -4,6 +4,21 @@
 
 ### New features
 
+- [`ggforest()`](https://drhrf.github.io/ggmeta/reference/ggforest.md)
+  and
+  [`ggfunnel()`](https://drhrf.github.io/ggmeta/reference/ggfunnel.md)
+  gain per-element styling arguments, so the built-in layers can be
+  restyled directly.
+  [`ggforest()`](https://drhrf.github.io/ggmeta/reference/ggforest.md)
+  takes `ci_args`, `diamond_args`, `diamond_colours`, `predict_args`,
+  `ref_args`, `consensus`, and `consensus_args`;
+  [`ggfunnel()`](https://drhrf.github.io/ggmeta/reference/ggfunnel.md)
+  takes `point_args`, `contour_args`, and `ref_args`. For example
+  `ggforest(m, predict_args = list(cap_width = 0.1, colour = "red"))` or
+  `ggforest(m, diamond_colours = c(random = "steelblue"))`. Previously
+  the only way to reach these layers was to add another
+  `geom_forest_*()`, which drew a *second* layer over every row instead
+  of restyling the built-in one.
 - New
   [`ggfunnel()`](https://drhrf.github.io/ggmeta/reference/ggfunnel.md)
   draws a funnel plot (study effect vs. standard error with pseudo

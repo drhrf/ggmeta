@@ -29,6 +29,9 @@ ggfunnel(
   xlab = NULL,
   ylab = "Standard error",
   title = NULL,
+  point_args = list(),
+  contour_args = list(),
+  ref_args = list(),
   ...
 )
 ```
@@ -72,6 +75,17 @@ ggfunnel(
 - title:
 
   Plot title. Default `NULL`.
+
+- point_args, contour_args, ref_args:
+
+  Lists of arguments used to restyle the study points
+  ([`ggplot2::geom_point()`](https://ggplot2.tidyverse.org/reference/geom_point.html)),
+  the funnel contours
+  ([`geom_funnel_contour()`](https://drhrf.github.io/ggmeta/reference/geom_funnel_contour.md)),
+  and the vertical reference line
+  ([`ggplot2::geom_vline()`](https://ggplot2.tidyverse.org/reference/geom_abline.html)).
+  For example `point_args = list(size = 3, fill = "black")` or
+  `contour_args = list(colour = "grey70", linetype = "dotted")`.
 
 ## Value
 
