@@ -35,6 +35,7 @@ Suggests:
     testthat (>= 3.0.0),
     vdiffr (>= 1.0.0)
 Encoding: UTF-8
+Language: en-US
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
