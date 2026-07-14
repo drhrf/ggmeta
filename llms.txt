@@ -43,8 +43,8 @@ ggforest(studies, add_summary = TRUE)
 Pass a `meta` object and add `columns = TRUE` to reproduce the familiar
 [`meta::forest()`](https://wviechtb.github.io/metafor/reference/forest.html)
 table: an effect estimate, 95% CI, and weight column for every study and
-summary, headers, and a heterogeneity line (*I²*, *τ²*, *Q*, *p*) — all
-as a plain `ggplot`.
+summary, headers, and a heterogeneity line (*I²*, the between-study
+variance, *Q*, and *p*) — all as a plain `ggplot`.
 
 ``` r
 
@@ -88,7 +88,7 @@ ggforest(m, sort_studies  = FALSE)          # keep the input order
 contours). And because every plot is an ordinary `ggplot`, a forest and
 a funnel compose on a single figure with
 [patchwork](https://patchwork.data-imaginist.com) — something that is
-awkward with `meta`’s base-graphics output:
+awkward with the base-graphics output of `meta`:
 
 ``` r
 
