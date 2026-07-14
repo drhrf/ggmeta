@@ -2,11 +2,16 @@
 
 0 errors | 0 warnings | 1 note
 
-* This is a new release, so the NOTE is the standard "New submission" note.
+* This is a new submission.
+* The NOTE reports possibly misspelled words in the DESCRIPTION -- "BMJ",
+  "JAMA", and "RevMan". These are correct: they name the journals and software
+  (British Medical Journal, the Journal of the American Medical Association, and
+  the Cochrane Review Manager) whose layout presets the package provides.
 
 ## Test environments
 
 * Local macOS 15 (aarch64), R 4.6.1, `R CMD check --as-cran`
+* win-builder, R-devel (R Under development, 2026-07-13 r90246 ucrt): 1 NOTE
 * GitHub Actions:
   * macOS-latest, R release
   * windows-latest, R release
