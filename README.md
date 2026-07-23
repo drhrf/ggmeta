@@ -9,6 +9,8 @@
 [![pkgdown](https://github.com/drhrf/ggmeta/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/drhrf/ggmeta/actions/workflows/pkgdown.yaml)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/ggmeta)](https://CRAN.R-project.org/package=ggmeta)
 <!-- badges: end -->
 
 **ggmeta** builds publication-quality forest and funnel plots with
@@ -18,6 +20,14 @@ tidy data frame — the result is an ordinary `ggplot` you can theme,
 compose, and save.
 
 ## Installation
+
+Install the released version from CRAN:
+
+``` r
+install.packages("ggmeta")
+```
+
+Or the development version from GitHub:
 
 ``` r
 # install.packages("remotes")

@@ -1,3 +1,8 @@
+# ggmeta 0.1.0.9000
+
+* Development version. Post-release touches: a package hex-sticker logo and a
+  CRAN status badge in the README.
+
 # ggmeta 0.1.0
 
 First CRAN release.

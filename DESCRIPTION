@@ -1,6 +1,6 @@
 Package: ggmeta
 Title: Publication-Quality Forest and Funnel Plots with 'ggplot2'
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: c(
     person(given = "Hercules R.",
            family = "Freitas",

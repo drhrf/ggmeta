@@ -16,6 +16,7 @@ Rplots.pdf
 
 # Local agent / editor settings
 .claude/
+graphify-out/
 
 # Internal notes not part of the package
 for_claude.md
