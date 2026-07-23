@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/drhrf/ggmeta/blob/v0.1.0/inst/CITATION)
+[`inst/CITATION`](https://github.com/drhrf/ggmeta/blob/main/inst/CITATION)
 
 Freitas H (2026). *ggmeta: Publication-Quality Forest and Funnel Plots
 with 'ggplot2'*. R package version 0.1.0,

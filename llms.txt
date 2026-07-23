@@ -8,6 +8,15 @@ compose, and save.
 
 ## Installation
 
+Install the released version from CRAN:
+
+``` r
+
+install.packages("ggmeta")
+```
+
+Or the development version from GitHub:
+
 ``` r
 
 # install.packages("remotes")
