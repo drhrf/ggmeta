@@ -8,7 +8,7 @@
 [![R-CMD-check](https://github.com/drhrf/ggmeta/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/drhrf/ggmeta/actions/workflows/R-CMD-check.yaml)
 [![pkgdown](https://github.com/drhrf/ggmeta/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/drhrf/ggmeta/actions/workflows/pkgdown.yaml)
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/ggmeta)](https://CRAN.R-project.org/package=ggmeta)
 <!-- badges: end -->
