@@ -12,7 +12,7 @@
 # Usage: Rscript manuscript/R/01-gather-datasets.R
 
 library(meta)
-library(metafor)
+library(metadat)                 # source of dat.bcg, dat.molloy2014, dat.pritz1997
 pkgload::load_all(here::here())  # load ggmeta from source
 
 base <- here::here("manuscript", "data")
@@ -28,7 +28,7 @@ save_poc <- function(key, raw, m) {
 }
 
 # 1. BCG tuberculosis — binary RR (dat.bcg, metafor)
-data("dat.bcg", package = "metafor")
+data("dat.bcg", package = "metadat")
 cat("dat.bcg columns:", paste(names(dat.bcg), collapse = ", "), "\n")
 m_bcg <- metabin(tpos, tpos + tneg, cpos, cpos + cneg,
                  studlab = paste(author, year), data = dat.bcg, sm = "RR")
@@ -62,7 +62,7 @@ save_poc("amlodipine_capacity", amlodipine, m_aml)
 cat("  amlodipine_capacity: saved\n")
 
 # 4. Conscientiousness & medication adherence — ZCOR (dat.molloy2014, metafor)
-data("dat.molloy2014", package = "metafor")
+data("dat.molloy2014", package = "metadat")
 cat("dat.molloy2014 columns:", paste(names(dat.molloy2014), collapse = ", "), "\n")
 m_cor <- metacor(ri, ni, studlab = paste(authors, year),
                  data = dat.molloy2014, sm = "ZCOR")
@@ -73,7 +73,7 @@ cat("  conscientiousness_adherence: saved\n")
 # NOTE: dat.pritz1997$study is a numeric row ID, not a label — use the authors
 # column as studlab so this figure carries author labels like the others. There
 # is no year column in this dataset, so labels are author-only.
-data("dat.pritz1997", package = "metafor")
+data("dat.pritz1997", package = "metadat")
 cat("dat.pritz1997 columns:", paste(names(dat.pritz1997), collapse = ", "), "\n")
 m_pr <- metaprop(xi, ni, studlab = authors, data = dat.pritz1997, sm = "PLOGIT")
 save_poc("pritz_recurrence", dat.pritz1997, m_pr)
