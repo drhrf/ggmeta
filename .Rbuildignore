@@ -21,3 +21,4 @@
 ^Rplots\.pdf$
 ^.*\.Rproj$
 ^ggmeta_hex_logo\.png$
+^manuscript$
