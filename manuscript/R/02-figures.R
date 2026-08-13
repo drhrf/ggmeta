@@ -60,9 +60,9 @@ save_fig(layout_revman5(ggforest(m_asp, columns = TRUE)), "fig5c-revman5.pdf", 9
 # no null-effect reference line).
 save_fig(ggforest(m_pr, columns = TRUE), "fig6-pritz-forest.pdf", 9, 5)
 
-# Fig 7 (figS1) — subgroup forest, BCG stratified by allocation method.
+# Fig 7 — subgroup forest, BCG stratified by allocation method.
 # Uses m_bcg_sg, NOT m_bcg. Taller than Fig 1 because subgroup headers and
 # three pairs of within-subgroup diamonds add roughly nine extra rows.
-save_fig(ggforest(m_bcg_sg, columns = TRUE), "figS1-bcg-subgroup.pdf", 9, 8)
+save_fig(ggforest(m_bcg_sg, columns = TRUE), "fig7-bcg-subgroup.pdf", 9, 8)
 
 cat("Figures written to", fig, "\n")
