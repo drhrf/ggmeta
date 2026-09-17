@@ -86,3 +86,25 @@ test_that("missing required columns raise an informative error", {
   expect_error(ggforest(data.frame(estimate = 1, ci_lower = 0, ci_upper = 2)),
     "studlab")
 })
+
+test_that("meta objects with non-contributing (double-zero) studies work", {
+  skip_if_not_installed("meta")
+  dz <- data.frame(
+    ev.e = c(3, 0, 5, 7), n.e = c(40, 30, 50, 60),
+    ev.c = c(6, 0, 9, 8), n.c = c(40, 30, 50, 60),
+    study = c("A", "B", "C", "D")
+  )
+  m <- suppressWarnings(meta::metabin(ev.e, n.e, ev.c, n.c,
+    studlab = study, data = dz, sm = "RR"))
+  expect_lt(m$k, length(m$studlab))
+
+  td <- tidy_meta(m)
+  expect_equal(sum(!td$is_summary), 4)
+  expect_true(is.na(td$estimate[td$studlab == "B"]))
+
+  p <- ggforest(m, columns = TRUE)
+  expect_no_warning(ld <- ggplot2::layer_data(p, ci_layer(p)))
+  expect_equal(nrow(ld), 3)
+  b <- build_quietly(p)
+  expect_true("B" %in% b$layout$panel_params[[1]]$y$get_labels())
+})

@@ -5,6 +5,12 @@
 
 ## Bug fixes
 
+* `tidy_meta()` and `ggforest()` no longer fail on `meta` objects that contain
+  studies excluded from pooling, such as double-zero studies in
+  `meta::metabin()`. The number of study rows was taken from `x$k`, which
+  counts only contributing studies, so building the tidy data frame stopped
+  with "arguments imply differing number of rows". Such studies are now shown
+  with their label and no interval, as in `meta::forest()`.
 * On-the-fly pooling of a data frame (`add_summary = TRUE`) now works on the
   log scale for ratio measures. `ggforest(df, add_summary = TRUE,
   null_effect = 1)` log-transforms the estimates and confidence limits before

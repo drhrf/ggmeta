@@ -239,8 +239,11 @@ tidy_meta.meta <- function(x,
 #' Extract study-level rows from a meta object
 #' @noRd
 extract_studies <- function(x, models) {
-  k <- x$k
-  if (is.null(k) || k == 0) {
+  # Number of study rows. `x$k` counts only the studies that contribute to
+  # pooling (it excludes e.g. double-zero studies in metabin()), whereas the
+  # study-level vectors (studlab, TE, ...) have one entry per study.
+  k <- length(x$studlab)
+  if (k == 0) {
     return(data.frame(
       studlab     = character(0),
       estimate    = numeric(0),
