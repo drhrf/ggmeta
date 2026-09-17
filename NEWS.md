@@ -16,6 +16,11 @@
   `p = 0.000` for very small p-values.
 * Table columns (`columns = TRUE`) no longer print a negative zero (`-0.00`)
   for values that round to zero.
+* `geom_forest_ci()` square sizes now follow the documented mapping
+  `min + (max - min) * sqrt(weight / max(weight))`. The computed sizes were
+  previously mapped with `after_stat()` and therefore rescaled a second time by
+  ggplot2's default size scale, which compressed the differences between
+  studies. A constant or mapped `size` still overrides the weight-based size.
 
 ## Minor improvements
 

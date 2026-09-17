@@ -74,7 +74,11 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 spacing between study rows. Default: \code{0.3}.}
 
 \item{point_size_range}{Minimum and maximum point size in mm.
-Default: \code{c(1, 6)}.}
+Default: \code{c(1, 6)}. The side of each square is
+\code{min + (max - min) * sqrt(weight / max(weight))}, i.e. the part above the
+minimum grows with the square root of the weight. Missing or
+non-positive weights get the minimum size. A constant \code{size} (or a mapped
+\code{size} aesthetic) overrides the weight-based size.}
 
 \item{na.rm}{If \code{FALSE} (default), missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
