@@ -90,10 +90,16 @@ tidy_meta.default <- function(x, ...) {
 #'   TRUE`: `"common"`, `"random"`, or both (default).
 #' @param level Confidence level for the pooled summary interval. Default
 #'   `0.95`.
+#' @param log_scale For the data-frame method with `add_summary = TRUE`: are
+#'   the effects ratios (RR, OR, HR, ...) given on the natural scale? If `TRUE`,
+#'   they are pooled on the log scale and the summary is exponentiated back; a
+#'   supplied `se` must be the standard error of the log estimate. Default
+#'   `FALSE`.
 tidy_meta.data.frame <- function(x,
                                  add_summary = FALSE,
                                  summary_method = c("common", "random"),
                                  level = 0.95,
+                                 log_scale = FALSE,
                                  ...) {
   # If already a data frame (from standalone usage), validate and pass through
   required <- c("estimate", "ci_lower", "ci_upper", "studlab")
@@ -114,7 +120,8 @@ tidy_meta.data.frame <- function(x,
 
   # On-the-fly pooling: append summary rows computed from the study rows.
   if (isTRUE(add_summary)) {
-    summ <- build_summary_rows(x, method = summary_method, level = level)
+    summ <- build_summary_rows(x, method = summary_method, level = level,
+                               log_scale = log_scale)
     if (!is.null(summ)) {
       # Carry any extra user columns onto the summary rows as NA before binding.
       for (col in setdiff(names(x), names(summ))) summ[[col]] <- NA

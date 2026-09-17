@@ -3,6 +3,29 @@
 * Development version. Post-release touches: a package hex-sticker logo and a
   CRAN status badge in the README.
 
+## Bug fixes
+
+* On-the-fly pooling of a data frame (`add_summary = TRUE`) now works on the
+  log scale for ratio measures. `ggforest(df, add_summary = TRUE,
+  null_effect = 1)` log-transforms the estimates and confidence limits before
+  inverse-variance / DerSimonian-Laird pooling and exponentiates the summary
+  back; `tidy_meta()` gains `log_scale` for the same purpose. Previously ratio
+  values were pooled on the natural scale and their standard errors were
+  recovered from asymmetric intervals, which gave wrong summaries.
+* The heterogeneity caption of `ggforest()` prints `p < 0.001` instead of
+  `p = 0.000` for very small p-values.
+* Table columns (`columns = TRUE`) no longer print a negative zero (`-0.00`)
+  for values that round to zero.
+
+## Minor improvements
+
+* `ggforest()`/`tidy_meta()` pooling and `ggfunnel()` now report how many
+  studies were left out (missing or non-finite estimate, or a standard error
+  that is not positive) instead of dropping them silently.
+* New tests document the behaviour at boundary conditions (missing or
+  non-positive weights, missing confidence limits or estimates, single-study
+  pooling, funnel plots without usable studies, single-group measures).
+
 # ggmeta 0.1.0
 
 First CRAN release.

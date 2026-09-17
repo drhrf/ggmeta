@@ -16,6 +16,7 @@ tidy_meta(x, ...)
   add_summary = FALSE,
   summary_method = c("common", "random"),
   level = 0.95,
+  log_scale = FALSE,
   ...
 )
 
@@ -45,6 +46,12 @@ Needs a \code{se} column, or \code{ci_lower}/\code{ci_upper} to recover it. Defa
 
 \item{level}{Confidence level for the pooled summary interval. Default
 \code{0.95}.}
+
+\item{log_scale}{For the data-frame method with \code{add_summary = TRUE}: are
+the effects ratios (RR, OR, HR, ...) given on the natural scale? If \code{TRUE},
+they are pooled on the log scale and the summary is exponentiated back; a
+supplied \code{se} must be the standard error of the log estimate. Default
+\code{FALSE}.}
 
 \item{back_trans}{Should the estimate and confidence limits be
 back-transformed to the natural scale? If \code{"auto"} (default), each summary

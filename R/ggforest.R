@@ -126,8 +126,13 @@ ggforest.meta <- function(
 #' @param add_summary For the data-frame method, if `TRUE` compute a pooled
 #'   summary from the study rows (inverse-variance and/or DerSimonian-Laird)
 #'   and draw it as a diamond — on-the-fly meta-analysis without the
-#'   \pkg{meta} package. Needs a `se` column, or `ci_lower`/`ci_upper` to
-#'   recover it. Default: `FALSE`.
+#'   \pkg{meta} package. Needs a `se` column, or `ci_lower`/`ci_upper` (a
+#'   95% Wald interval) to recover it. When `null_effect = 1` (ratio
+#'   measures), estimates and limits are taken to be on the ratio scale and
+#'   are pooled on the log scale; a supplied `se` must then be the standard
+#'   error of the log estimate. The `weight` column only sizes the squares and
+#'   does not enter the pooled estimate. Studies with a missing estimate or a
+#'   non-positive standard error are excluded with a message. Default: `FALSE`.
 #' @param summary_method Which pooled summaries to add when `add_summary =
 #'   TRUE`: `"common"`, `"random"`, or both (default).
 #' @param level Confidence level for the pooled summary interval. Default
@@ -212,15 +217,19 @@ ggforest.data.frame <- function(
   # On-the-fly pooling: append computed summary rows from the study rows so
   # they render as a diamond at the bottom (via the factor ordering below).
   if (isTRUE(add_summary)) {
+    # Ratio measures (null effect at 1) are pooled on the log scale.
+    ratio_scale <- !is.null(null_effect) && length(null_effect) == 1L &&
+      !is.na(null_effect) && null_effect == 1
     # Give studies inverse-variance weights for square sizing if none supplied.
     if (all(is.na(x$weight))) {
       se_x <- x$se
       if (is.null(se_x) || all(is.na(se_x))) {
-        se_x <- (x$ci_upper - x$ci_lower) / (2 * stats::qnorm(0.975))
+        se_x <- se_from_ci(x$ci_lower, x$ci_upper, ratio_scale)
       }
       x$weight <- ifelse(is.finite(se_x) & se_x > 0, 1 / se_x^2, NA_real_)
     }
-    summ <- build_summary_rows(x, method = summary_method, level = level)
+    summ <- build_summary_rows(x, method = summary_method, level = level,
+                               log_scale = ratio_scale)
     if (!is.null(summ)) {
       for (col in setdiff(names(x), names(summ))) summ[[col]] <- NA
       x <- rbind(x, summ[names(x)])
@@ -400,7 +409,13 @@ forest_columns_spec <- function(x, columns, sm, effect_header, log_scale) {
     wpct[is_study] <- x$weight[is_study] / wsum * 100
   }
 
-  f2 <- function(v) formatC(v, format = "f", digits = 2)
+  f2 <- function(v) {
+    # Round first and drop the sign of values that round to zero, so that
+    # e.g. -0.001 is printed as "0.00" rather than "-0.00".
+    v <- round(v, 2)
+    v[!is.na(v) & v == 0] <- 0
+    formatC(v, format = "f", digits = 2)
+  }
   cells <- list(
     estimate = ifelse(is.na(x$estimate), "", f2(x$estimate)),
     ci = ifelse(
@@ -485,6 +500,21 @@ forest_columns_spec <- function(x, columns, sm, effect_header, log_scale) {
   )
 }
 
+#' Format a p-value for the heterogeneity caption
+#'
+#' Returns the relation and value as one string, e.g. `"= 0.090"` or
+#' `"< 0.001"`, so that very small p-values are not printed as `"= 0.000"`.
+#' @noRd
+format_pval_label <- function(p, digits = 3) {
+  if (length(p) != 1L || is.na(p)) return("= NA")
+  threshold <- 10^(-digits)
+  if (p < threshold) {
+    paste("<", formatC(threshold, format = "f", digits = digits))
+  } else {
+    paste("=", formatC(p, format = "f", digits = digits))
+  }
+}
+
 #' Build a plotmath caption with heterogeneity statistics
 #'
 #' Returns a plotmath expression (not a character string) so that the
@@ -504,11 +534,10 @@ build_hetstats_caption <- function(x, is_random) {
 
   if (!is.null(x$Q) && !is.null(x$pval.Q)) {
     q  <- sprintf("%.2f", x$Q)
-    pq <- sprintf("%.3f", x$pval.Q)
     bquote(
       "Heterogeneity:" ~ italic(I)^2 ~ "=" ~ .(i2) * "%;" ~
         tau^2 ~ "=" ~ .(tau2) * ";" ~ italic(Q) ~ "=" ~ .(q) * "," ~
-        italic(p) ~ "=" ~ .(pq)
+        italic(p) ~ .(format_pval_label(x$pval.Q))
     )
   } else {
     bquote(

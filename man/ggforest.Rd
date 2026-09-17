@@ -80,8 +80,13 @@ serve as the y-axis text).}
 \item{add_summary}{For the data-frame method, if \code{TRUE} compute a pooled
 summary from the study rows (inverse-variance and/or DerSimonian-Laird)
 and draw it as a diamond — on-the-fly meta-analysis without the
-\pkg{meta} package. Needs a \code{se} column, or \code{ci_lower}/\code{ci_upper} to
-recover it. Default: \code{FALSE}.}
+\pkg{meta} package. Needs a \code{se} column, or \code{ci_lower}/\code{ci_upper} (a
+95\% Wald interval) to recover it. When \code{null_effect = 1} (ratio
+measures), estimates and limits are taken to be on the ratio scale and
+are pooled on the log scale; a supplied \code{se} must then be the standard
+error of the log estimate. The \code{weight} column only sizes the squares and
+does not enter the pooled estimate. Studies with a missing estimate or a
+non-positive standard error are excluded with a message. Default: \code{FALSE}.}
 
 \item{summary_method}{Which pooled summaries to add when \code{add_summary = TRUE}: \code{"common"}, \code{"random"}, or both (default).}
 

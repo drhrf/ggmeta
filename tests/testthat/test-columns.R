@@ -79,3 +79,17 @@ test_that("right-hand columns stay close to the forest plot", {
   expect_lt(min(column_x), 0.75)
   expect_lt(max(column_x), 1.30)
 })
+
+test_that("values that round to zero are printed without a minus sign", {
+  df <- data.frame(
+    studlab  = c("A", "B"),
+    estimate = c(0.14, -0.001),
+    ci_lower = c(-0.004, -0.2),
+    ci_upper = c(0.29, 0.2)
+  )
+  labs <- collect_labels(ggforest(df, columns = c("estimate", "ci")))
+  expect_false(any(grepl("-0.00", labs, fixed = TRUE)))
+  expect_true("[0.00, 0.29]" %in% labs)
+  expect_true("0.00" %in% labs)
+  expect_true("[-0.20, 0.20]" %in% labs)
+})
