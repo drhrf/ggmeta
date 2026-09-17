@@ -91,3 +91,30 @@ test_that("StatForestRef computes full-height vertical line", {
   expect_equal(result$xend, 0)
   expect_true(result$y < result$yend)  # y < yend (spanning full range)
 })
+
+test_that("square sizes follow the documented weight-to-size mapping", {
+  df <- data.frame(
+    study = c("A", "B", "C", "D"),
+    estimate = c(0.5, 0.8, 0.3, 0.6),
+    lower = c(0.2, 0.6, 0.1, 0.4),
+    upper = c(0.8, 1.0, 0.5, 0.8),
+    weight = c(1, 4, 16, 9)
+  )
+  p <- ggplot2::ggplot(df, ggplot2::aes(y = study, x = estimate,
+    xmin = lower, xmax = upper, weight = weight)) +
+    geom_forest_ci()
+  ld <- ggplot2::layer_data(p)
+  expect_equal(ld$size, 1 + 5 * sqrt(df$weight / 16))
+
+  # the same holds inside ggforest()
+  names(df) <- c("studlab", "estimate", "ci_lower", "ci_upper", "weight")
+  p2 <- ggforest(df)
+  i <- which(vapply(p2$layers, function(l) inherits(l$geom, "GeomForestCI"), NA))
+  expect_equal(ggplot2::layer_data(p2, i)$size, 1 + 5 * sqrt(df$weight / 16))
+
+  # a constant size overrides the weight-based size
+  p3 <- ggplot2::ggplot(df, ggplot2::aes(y = studlab, x = estimate,
+    xmin = ci_lower, xmax = ci_upper, weight = weight)) +
+    geom_forest_ci(size = 3)
+  expect_equal(unique(ggplot2::layer_data(p3)$size), 3)
+})

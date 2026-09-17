@@ -174,21 +174,42 @@ pool_effects <- function(te, se, method = c("common", "random"), level = 0.95) {
 #' @param df A tidy data frame with `estimate` and either `se` or
 #'   `ci_lower`/`ci_upper` columns; only non-summary rows are pooled.
 #' @param method,level Passed to `pool_effects()`.
+#' @param log_scale If `TRUE` (ratio measures), `estimate`, `ci_lower` and
+#'   `ci_upper` are on the natural (ratio) scale: they are log-transformed
+#'   before pooling, a supplied `se` is taken to be the standard error of the
+#'   log estimate, and the pooled estimate and limits are exponentiated back.
 #' @return A data frame of summary rows matching the tidy layout, or `NULL`.
 #' @noRd
-build_summary_rows <- function(df, method = c("common", "random"), level = 0.95) {
+build_summary_rows <- function(df, method = c("common", "random"), level = 0.95,
+                               log_scale = FALSE) {
   is_sum <- if (!is.null(df$is_summary)) df$is_summary else rep(FALSE, nrow(df))
   study  <- df[!is_sum, , drop = FALSE]
   if (nrow(study) == 0) return(NULL)
 
-  # Standard errors: use `se` when supplied, else recover from the 95% CI.
+  te <- to_pooling_scale(study$estimate, log_scale)
+
+  # Standard errors: use `se` when supplied, else recover from the 95% CI
+  # (on the pooling scale, i.e. log limits for ratio measures).
   se <- study$se
   if (is.null(se) || all(is.na(se))) {
-    se <- (study$ci_upper - study$ci_lower) / (2 * stats::qnorm(0.975))
+    se <- se_from_ci(study$ci_lower, study$ci_upper, log_scale)
   }
 
-  pooled <- pool_effects(study$estimate, se, method = method, level = level)
+  ok <- is.finite(te) & is.finite(se) & se > 0
+  n_drop <- sum(!ok)
+  if (n_drop > 0) {
+    cli::cli_inform(c(
+      "i" = "Excluded {n_drop} stud{?y/ies} from the pooled summary: missing or non-finite estimate, or standard error not positive."
+    ))
+  }
+
+  pooled <- pool_effects(te, se, method = method, level = level)
   if (is.null(pooled)) return(NULL)
+  if (log_scale) {
+    for (v in c("estimate", "ci_lower", "ci_upper")) {
+      pooled[[v]] <- exp(pooled[[v]])
+    }
+  }
 
   labels <- c(common = "Common effect", random = "Random effects")
   data.frame(
@@ -204,4 +225,29 @@ build_summary_rows <- function(df, method = c("common", "random"), level = 0.95)
     subgroup     = NA_character_,
     stringsAsFactors = FALSE
   )
+}
+
+#' Map effects to the pooling scale (log for ratio measures)
+#'
+#' Non-positive values on a ratio scale become `NaN` (and are then excluded
+#' from pooling) without an R warning.
+#' @noRd
+to_pooling_scale <- function(v, log_scale = FALSE) {
+  if (!log_scale) return(v)
+  out <- rep(NaN, length(v))
+  pos <- !is.na(v) & v > 0
+  out[pos] <- log(v[pos])
+  out[is.na(v)] <- NA_real_
+  out
+}
+
+#' Recover a standard error from a 95% confidence interval
+#'
+#' Assumes a symmetric Wald interval on the pooling scale:
+#' `se = (upper - lower) / (2 * qnorm(0.975))`, with log limits for ratio
+#' measures.
+#' @noRd
+se_from_ci <- function(lower, upper, log_scale = FALSE) {
+  (to_pooling_scale(upper, log_scale) - to_pooling_scale(lower, log_scale)) /
+    (2 * stats::qnorm(0.975))
 }

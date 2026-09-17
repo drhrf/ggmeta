@@ -53,6 +53,7 @@ ggfunnel.meta <- function(x, ..., ref = c("common", "random"), level = 0.95) {
   te <- x$TE
   se <- x$seTE
   keep <- is.finite(te) & is.finite(se) & se > 0
+  inform_dropped_funnel(sum(!keep))
   df <- data.frame(
     studlab  = as.character(x$studlab)[keep],
     estimate = te[keep],
@@ -100,7 +101,9 @@ ggfunnel.data.frame <- function(x,
     cli::cli_abort("Data frame must contain columns: {.val {missing_cols}}")
   }
 
-  d <- x[is.finite(x$estimate) & is.finite(x$se) & x$se > 0, , drop = FALSE]
+  keep <- is.finite(x$estimate) & is.finite(x$se) & x$se > 0
+  inform_dropped_funnel(sum(!keep))
+  d <- x[keep, , drop = FALSE]
   if (nrow(d) == 0) {
     cli::cli_abort(
       "No studies with a finite {.field estimate} and positive {.field se}."
@@ -152,6 +155,17 @@ ggfunnel.data.frame <- function(x,
   }
 
   p
+}
+
+#' Tell the user how many studies a funnel plot leaves out
+#' @noRd
+inform_dropped_funnel <- function(n_drop) {
+  if (n_drop > 0) {
+    cli::cli_inform(c(
+      "i" = "Omitted {n_drop} stud{?y/ies} from the funnel plot: missing or non-finite estimate, or standard error not positive."
+    ))
+  }
+  invisible(n_drop)
 }
 
 #' Back-transformed x-axis breaks for a funnel plot
