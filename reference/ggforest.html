@@ -153,8 +153,13 @@ serve as the y-axis text).</p></dd>
 <dd><p>For the data-frame method, if <code>TRUE</code> compute a pooled
 summary from the study rows (inverse-variance and/or DerSimonian-Laird)
 and draw it as a diamond — on-the-fly meta-analysis without the
-<span class="pkg">meta</span> package. Needs a <code>se</code> column, or <code>ci_lower</code>/<code>ci_upper</code> to
-recover it. Default: <code>FALSE</code>.</p></dd>
+<span class="pkg">meta</span> package. Needs a <code>se</code> column, or <code>ci_lower</code>/<code>ci_upper</code> (a
+95% Wald interval) to recover it. When <code>null_effect = 1</code> (ratio
+measures), estimates and limits are taken to be on the ratio scale and
+are pooled on the log scale; a supplied <code>se</code> must then be the standard
+error of the log estimate. The <code>weight</code> column only sizes the squares and
+does not enter the pooled estimate. Studies with a missing estimate or a
+non-positive standard error are excluded with a message. Default: <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-summary-method">summary_method<a class="anchor" aria-label="anchor" href="#arg-summary-method"></a></dt>

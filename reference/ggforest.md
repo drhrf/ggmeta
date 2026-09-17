@@ -113,7 +113,13 @@ ggforest(
   For the data-frame method, if `TRUE` compute a pooled summary from the
   study rows (inverse-variance and/or DerSimonian-Laird) and draw it as
   a diamond — on-the-fly meta-analysis without the meta package. Needs a
-  `se` column, or `ci_lower`/`ci_upper` to recover it. Default: `FALSE`.
+  `se` column, or `ci_lower`/`ci_upper` (a 95% Wald interval) to recover
+  it. When `null_effect = 1` (ratio measures), estimates and limits are
+  taken to be on the ratio scale and are pooled on the log scale; a
+  supplied `se` must then be the standard error of the log estimate. The
+  `weight` column only sizes the squares and does not enter the pooled
+  estimate. Studies with a missing estimate or a non-positive standard
+  error are excluded with a message. Default: `FALSE`.
 
 - summary_method:
 

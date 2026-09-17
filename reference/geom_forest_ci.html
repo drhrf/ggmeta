@@ -126,7 +126,11 @@ spacing between study rows. Default: <code>0.3</code>.</p></dd>
 
 <dt id="arg-point-size-range">point_size_range<a class="anchor" aria-label="anchor" href="#arg-point-size-range"></a></dt>
 <dd><p>Minimum and maximum point size in mm.
-Default: <code>c(1, 6)</code>.</p></dd>
+Default: <code>c(1, 6)</code>. The side of each square is
+<code>min + (max - min) * sqrt(weight / max(weight))</code>, i.e. the part above the
+minimum grows with the square root of the weight. Missing or
+non-positive weights get the minimum size. A constant <code>size</code> (or a mapped
+<code>size</code> aesthetic) overrides the weight-based size.</p></dd>
 
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>

@@ -104,7 +104,11 @@ geom_forest_ci(
 
 - point_size_range:
 
-  Minimum and maximum point size in mm. Default: `c(1, 6)`.
+  Minimum and maximum point size in mm. Default: `c(1, 6)`. The side of
+  each square is `min + (max - min) * sqrt(weight / max(weight))`, i.e.
+  the part above the minimum grows with the square root of the weight.
+  Missing or non-positive weights get the minimum size. A constant
+  `size` (or a mapped `size` aesthetic) overrides the weight-based size.
 
 - na.rm:
 

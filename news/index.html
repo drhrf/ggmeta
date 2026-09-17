@@ -35,7 +35,23 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9000" id="ggmeta-0109000">ggmeta 0.1.0.9000<a class="anchor" aria-label="anchor" href="#ggmeta-0109000"></a></h2>
 <ul><li>Development version. Post-release touches: a package hex-sticker logo and a CRAN status badge in the README.</li>
+</ul><div class="section level3">
+<h3 id="bug-fixes-0-1-0-9000">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-0-9000"></a></h3>
+<ul><li>
+<code><a href="../reference/tidy_meta.html">tidy_meta()</a></code> and <code><a href="../reference/ggforest.html">ggforest()</a></code> no longer fail on <code>meta</code> objects that contain studies excluded from pooling, such as double-zero studies in <code><a href="https://rdrr.io/pkg/meta/man/metabin.html" class="external-link">meta::metabin()</a></code>. The number of study rows was taken from <code>x$k</code>, which counts only contributing studies, so building the tidy data frame stopped with “arguments imply differing number of rows”. Such studies are now shown with their label and no interval, as in <code><a href="https://wviechtb.github.io/metafor/reference/forest.html" class="external-link">meta::forest()</a></code>.</li>
+<li>On-the-fly pooling of a data frame (<code>add_summary = TRUE</code>) now works on the log scale for ratio measures. <code>ggforest(df, add_summary = TRUE, null_effect = 1)</code> log-transforms the estimates and confidence limits before inverse-variance / DerSimonian-Laird pooling and exponentiates the summary back; <code><a href="../reference/tidy_meta.html">tidy_meta()</a></code> gains <code>log_scale</code> for the same purpose. Previously ratio values were pooled on the natural scale and their standard errors were recovered from asymmetric intervals, which gave wrong summaries.</li>
+<li>The heterogeneity caption of <code><a href="../reference/ggforest.html">ggforest()</a></code> prints <code>p &lt; 0.001</code> instead of <code>p = 0.000</code> for very small p-values.</li>
+<li>Table columns (<code>columns = TRUE</code>) no longer print a negative zero (<code>-0.00</code>) for values that round to zero.</li>
+<li>
+<code><a href="../reference/geom_forest_ci.html">geom_forest_ci()</a></code> square sizes now follow the documented mapping <code>min + (max - min) * sqrt(weight / max(weight))</code>. The computed sizes were previously mapped with <code><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat()</a></code> and therefore rescaled a second time by ggplot2’s default size scale, which compressed the differences between studies. A constant or mapped <code>size</code> still overrides the weight-based size.</li>
 </ul></div>
+<div class="section level3">
+<h3 id="minor-improvements-0-1-0-9000">Minor improvements<a class="anchor" aria-label="anchor" href="#minor-improvements-0-1-0-9000"></a></h3>
+<ul><li>
+<code><a href="../reference/ggforest.html">ggforest()</a></code>/<code><a href="../reference/tidy_meta.html">tidy_meta()</a></code> pooling and <code><a href="../reference/ggfunnel.html">ggfunnel()</a></code> now report how many studies were left out (missing or non-finite estimate, or a standard error that is not positive) instead of dropping them silently.</li>
+<li>New tests document the behaviour at boundary conditions (missing or non-positive weights, missing confidence limits or estimates, single-study pooling, funnel plots without usable studies, single-group measures).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="ggmeta-010">ggmeta 0.1.0<a class="anchor" aria-label="anchor" href="#ggmeta-010"></a></h2><p class="text-muted">CRAN release: 2026-07-22</p>
 <p>First CRAN release.</p>

@@ -5,6 +5,55 @@
 - Development version. Post-release touches: a package hex-sticker logo
   and a CRAN status badge in the README.
 
+### Bug fixes
+
+- [`tidy_meta()`](https://drhrf.github.io/ggmeta/reference/tidy_meta.md)
+  and
+  [`ggforest()`](https://drhrf.github.io/ggmeta/reference/ggforest.md)
+  no longer fail on `meta` objects that contain studies excluded from
+  pooling, such as double-zero studies in
+  [`meta::metabin()`](https://rdrr.io/pkg/meta/man/metabin.html). The
+  number of study rows was taken from `x$k`, which counts only
+  contributing studies, so building the tidy data frame stopped with
+  “arguments imply differing number of rows”. Such studies are now shown
+  with their label and no interval, as in
+  [`meta::forest()`](https://wviechtb.github.io/metafor/reference/forest.html).
+- On-the-fly pooling of a data frame (`add_summary = TRUE`) now works on
+  the log scale for ratio measures.
+  `ggforest(df, add_summary = TRUE, null_effect = 1)` log-transforms the
+  estimates and confidence limits before inverse-variance /
+  DerSimonian-Laird pooling and exponentiates the summary back;
+  [`tidy_meta()`](https://drhrf.github.io/ggmeta/reference/tidy_meta.md)
+  gains `log_scale` for the same purpose. Previously ratio values were
+  pooled on the natural scale and their standard errors were recovered
+  from asymmetric intervals, which gave wrong summaries.
+- The heterogeneity caption of
+  [`ggforest()`](https://drhrf.github.io/ggmeta/reference/ggforest.md)
+  prints `p < 0.001` instead of `p = 0.000` for very small p-values.
+- Table columns (`columns = TRUE`) no longer print a negative zero
+  (`-0.00`) for values that round to zero.
+- [`geom_forest_ci()`](https://drhrf.github.io/ggmeta/reference/geom_forest_ci.md)
+  square sizes now follow the documented mapping
+  `min + (max - min) * sqrt(weight / max(weight))`. The computed sizes
+  were previously mapped with
+  [`after_stat()`](https://ggplot2.tidyverse.org/reference/aes_eval.html)
+  and therefore rescaled a second time by ggplot2’s default size scale,
+  which compressed the differences between studies. A constant or mapped
+  `size` still overrides the weight-based size.
+
+### Minor improvements
+
+- [`ggforest()`](https://drhrf.github.io/ggmeta/reference/ggforest.md)/[`tidy_meta()`](https://drhrf.github.io/ggmeta/reference/tidy_meta.md)
+  pooling and
+  [`ggfunnel()`](https://drhrf.github.io/ggmeta/reference/ggfunnel.md)
+  now report how many studies were left out (missing or non-finite
+  estimate, or a standard error that is not positive) instead of
+  dropping them silently.
+- New tests document the behaviour at boundary conditions (missing or
+  non-positive weights, missing confidence limits or estimates,
+  single-study pooling, funnel plots without usable studies,
+  single-group measures).
+
 ## ggmeta 0.1.0
 
 CRAN release: 2026-07-22

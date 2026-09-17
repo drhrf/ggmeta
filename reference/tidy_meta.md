@@ -19,6 +19,7 @@ tidy_meta(
   add_summary = FALSE,
   summary_method = c("common", "random"),
   level = 0.95,
+  log_scale = FALSE,
   ...
 )
 
@@ -62,6 +63,14 @@ tidy_meta(
 - level:
 
   Confidence level for the pooled summary interval. Default `0.95`.
+
+- log_scale:
+
+  For the data-frame method with `add_summary = TRUE`: are the effects
+  ratios (RR, OR, HR, ...) given on the natural scale? If `TRUE`, they
+  are pooled on the log scale and the summary is exponentiated back; a
+  supplied `se` must be the standard error of the log estimate. Default
+  `FALSE`.
 
 - back_trans:
 
