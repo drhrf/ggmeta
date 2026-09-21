@@ -540,15 +540,26 @@ build_hetstats_caption <- function(x, is_random) {
     return(NULL)
   }
 
+  # A generalised linear mixed model tests heterogeneity twice, so it stores Q,
+  # df.Q and pval.Q as a (Wald, LRT) pair. meta::forest() keeps the first of
+  # each for its single-line caption ("Keep the first heterogeneity
+  # statistics"), which is the Wald test; take the same element so that Q and
+  # p describe one test and neither reaches sprintf() as a vector. df.Q pairs
+  # with them but is not printed here.
+  first_stat <- function(v) {
+    v <- unlist(v)
+    if (length(v) > 1L) v[[1L]] else v
+  }
+
   i2   <- sprintf("%.0f", (x$I2 %||% NA_real_) * 100)
   tau2 <- sprintf("%.4f", x$tau2)
 
   if (!is.null(x$Q) && !is.null(x$pval.Q)) {
-    q  <- sprintf("%.2f", x$Q)
+    q  <- sprintf("%.2f", first_stat(x$Q))
     bquote(
       "Heterogeneity:" ~ italic(I)^2 ~ "=" ~ .(i2) * "%;" ~
         tau^2 ~ "=" ~ .(tau2) * ";" ~ italic(Q) ~ "=" ~ .(q) * "," ~
-        italic(p) ~ .(format_pval_label(x$pval.Q))
+        italic(p) ~ .(format_pval_label(first_stat(x$pval.Q)))
     )
   } else {
     bquote(
