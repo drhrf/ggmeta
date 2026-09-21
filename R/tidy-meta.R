@@ -12,7 +12,11 @@
 #'   measure is back-transformed with its correct inverse via
 #'   [meta::backtransf()] (exponentiation for ratios, inverse-logit for
 #'   `PLOGIT`, Fisher's z to correlation for `ZCOR`, etc.); linear measures are
-#'   left unchanged. Use `"exp"` to force exponentiation or `"none"` to keep
+#'   left unchanged. Study rows of [meta::metaprop()] and [meta::metarate()]
+#'   objects get the observed `event / n` or `event / time` instead, as in
+#'   [meta::forest()], because the stored `TE` of a study with zero or all
+#'   events is continuity-corrected and so disagrees with its exact confidence
+#'   limits. Use `"exp"` to force exponentiation or `"none"` to keep
 #'   the analysis scale.
 #' @param sort_studies If `TRUE` (default), sort studies by effect estimate
 #'   (most favorable at top).
@@ -30,7 +34,8 @@
 #'   \item{ci_lower}{Lower confidence limit (numeric)}
 #'   \item{ci_upper}{Upper confidence limit (numeric)}
 #'   \item{se}{Standard error (numeric)}
-#'   \item{weight}{Study weight (numeric, \code{NA} for summaries)}
+#'   \item{weight}{Study weight (numeric, \code{NA} for summaries, and for
+#'     every study of a \code{method = "GLMM"} fit, which uses none)}
 #'   \item{p_value}{P-value (numeric)}
 #'   \item{n}{Sample size or person-time (numeric, optional)}
 #'   \item{event}{Number of events (numeric, optional)}
@@ -217,6 +222,12 @@ tidy_meta.meta <- function(x,
   }
   all_rows <- back_transform(all_rows, sm, back_trans, n = n_row, time = time_row)
 
+  # Study rows of single-group measures carry the observed value, not the
+  # back-transformed (and possibly continuity-corrected) TE.
+  if (back_trans != "none") {
+    all_rows <- use_observed_estimates(all_rows, x)
+  }
+
   # ---- 8. Set attributes ----
   attr(all_rows, "sm")    <- sm
   attr(all_rows, "null_effect") <- detect_null_effect(sm)
@@ -271,7 +282,14 @@ extract_studies <- function(x, models) {
     list(x$w.common, x$w.fixed, x$w.random)
   }
   w <- Find(usable, w_candidates)
-  if (is.null(w) && is.numeric(x$seTE) && any(is.finite(x$seTE))) {
+  # A generalised linear mixed model does not weight studies by the inverse of
+  # their variance, and meta leaves w.common / w.random empty for such fits.
+  # meta::forest() then drops the weight columns and draws equally sized
+  # squares, so skip the fallback rather than invent weights the model never
+  # used.
+  is_glmm <- !is.null(x$method) && any(x$method == "GLMM")
+  if (is.null(w) && !is_glmm &&
+      is.numeric(x$seTE) && any(is.finite(x$seTE))) {
     w <- 1 / x$seTE^2
   }
   if (is.null(w)) {
@@ -312,6 +330,33 @@ extract_studies <- function(x, models) {
     subgroup     = subgroup,
     stringsAsFactors = FALSE
   )
+}
+
+#' Use the observed value for single-group study estimates
+#'
+#' For a study with zero or all events, `metaprop()` and `metarate()` store a
+#' continuity-corrected `TE` (see `incr` / `method.incr`), so back-transforming
+#' it disagrees with the exact confidence limits: 12 of 12 events comes out as
+#' 0.96 against an interval reaching 1.00. `meta::forest()` plots the observed
+#' proportion (`event / n`) or rate (`event / time`) for every study of these
+#' types, whether or not a correction was applied and whatever the fitting
+#' method; this follows it. Summary rows keep their pooled estimates.
+#' @noRd
+use_observed_estimates <- function(rows, x) {
+  denom <- if (inherits(x, "metaprop")) {
+    x$n
+  } else if (inherits(x, "metarate")) {
+    x$time
+  } else {
+    return(rows)
+  }
+  if (is.null(x$event) || is.null(denom)) return(rows)
+
+  observed <- x$event / denom
+  idx <- match(as.character(rows$studlab), as.character(x$studlab))
+  sel <- !rows$is_summary & !is.na(idx)
+  rows$estimate[sel] <- observed[idx[sel]]
+  rows
 }
 
 #' Extract summary rows (common + random effects) from a meta object

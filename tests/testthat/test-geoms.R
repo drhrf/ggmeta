@@ -118,3 +118,26 @@ test_that("square sizes follow the documented weight-to-size mapping", {
     geom_forest_ci(size = 3)
   expect_equal(unique(ggplot2::layer_data(p3)$size), 3)
 })
+
+test_that("squares are equal and mid-sized when no weight is usable", {
+  df <- data.frame(
+    studlab = c("A", "B", "C"),
+    estimate = c(0.5, 0.8, 0.3),
+    ci_lower = c(0.2, 0.6, 0.1),
+    ci_upper = c(0.8, 1.0, 0.5),
+    weight = c(NA, NA, NA)
+  )
+  p <- ggplot2::ggplot(df, ggplot2::aes(y = studlab, x = estimate,
+    xmin = ci_lower, xmax = ci_upper, weight = weight)) +
+    geom_forest_ci()
+  # Nothing to scale, so meta::forest() draws one size for every study rather
+  # than shrinking them all to the minimum.
+  expect_equal(ggplot2::layer_data(p)$size, rep(mean(c(1, 6)), 3))
+
+  # A single unusable weight among usable ones still gets the minimum.
+  df$weight <- c(NA, 4, 16)
+  p2 <- ggplot2::ggplot(df, ggplot2::aes(y = studlab, x = estimate,
+    xmin = ci_lower, xmax = ci_upper, weight = weight)) +
+    geom_forest_ci()
+  expect_equal(ggplot2::layer_data(p2)$size, c(1, 1 + 5 * sqrt(4 / 16), 6))
+})

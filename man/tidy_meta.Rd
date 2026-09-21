@@ -58,7 +58,11 @@ back-transformed to the natural scale? If \code{"auto"} (default), each summary
 measure is back-transformed with its correct inverse via
 \code{\link[meta:backtransf]{meta::backtransf()}} (exponentiation for ratios, inverse-logit for
 \code{PLOGIT}, Fisher's z to correlation for \code{ZCOR}, etc.); linear measures are
-left unchanged. Use \code{"exp"} to force exponentiation or \code{"none"} to keep
+left unchanged. Study rows of \code{\link[meta:metaprop]{meta::metaprop()}} and \code{\link[meta:metarate]{meta::metarate()}}
+objects get the observed \code{event / n} or \code{event / time} instead, as in
+\code{\link[meta:forest]{meta::forest()}}, because the stored \code{TE} of a study with zero or all
+events is continuity-corrected and so disagrees with its exact confidence
+limits. Use \code{"exp"} to force exponentiation or \code{"none"} to keep
 the analysis scale.}
 
 \item{sort_studies}{If \code{TRUE} (default), sort studies by effect estimate
@@ -78,7 +82,8 @@ A \code{data.frame} with one row per study or summary, with columns:
 \item{ci_lower}{Lower confidence limit (numeric)}
 \item{ci_upper}{Upper confidence limit (numeric)}
 \item{se}{Standard error (numeric)}
-\item{weight}{Study weight (numeric, \code{NA} for summaries)}
+\item{weight}{Study weight (numeric, \code{NA} for summaries, and for
+every study of a \code{method = "GLMM"} fit, which uses none)}
 \item{p_value}{P-value (numeric)}
 \item{n}{Sample size or person-time (numeric, optional)}
 \item{event}{Number of events (numeric, optional)}
