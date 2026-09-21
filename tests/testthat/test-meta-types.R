@@ -53,12 +53,20 @@ test_that("tidy_meta back-transforms each measure like meta::backtransf", {
 test_that("study weights are always finite (inverse-variance fallback)", {
   skip_if_not_installed("meta")
 
-  # metaprop leaves w.common/w.random as all-NA; extraction must fall back to
-  # inverse-variance weights so no study CI is dropped by the stat.
+  # When a meta object leaves w.common/w.random as all-NA, extraction falls
+  # back to inverse-variance weights so no study CI is dropped by the stat.
+  # (GLMM fits are the exception: see the weights test below.)
   mp <- meta::metaprop(event = c(15, 20, 12, 25), n = c(50, 60, 55, 70),
-    studlab = paste0("S", 1:4), sm = "PLOGIT")
+    studlab = paste0("S", 1:4), sm = "PLOGIT", method = "Inverse")
   study <- tidy_meta(mp)[!tidy_meta(mp)$is_summary, ]
   expect_true(all(is.finite(study$weight) & study$weight > 0))
+
+  blank <- mp
+  blank$w.common[] <- NA_real_
+  blank$w.random[] <- NA_real_
+  blank$w.fixed <- NULL
+  blanked <- tidy_meta(blank)[!tidy_meta(blank)$is_summary, ]
+  expect_equal(blanked$weight, 1 / mp$seTE^2, tolerance = 1e-8)
 })
 
 test_that("null effect: NA for single proportions/rates, 1 for ratios, 0 else", {
@@ -129,4 +137,66 @@ test_that("subgroups keep studies grouped under clean (unmarked) headers", {
   expect_true(pos("EU") < min(eu_studies))
   expect_true(max(eu_studies) < pos("US"))
   expect_true(pos("US") < min(us_studies))
+})
+
+test_that("metaprop study estimates ignore the continuity correction", {
+  skip_if_not_installed("meta")
+
+  # Studies with zero or all events get a 0.5-corrected logit in `TE`, whose
+  # back-transform disagrees with the exact interval: 12 of 12 events came out
+  # as 0.96 against an upper limit of 1.00. meta::forest() plots event / n.
+  mp <- meta::metaprop(
+    event = c(12, 0, 5), n = c(12, 10, 20),
+    studlab = c("all", "none", "some"), sm = "PLOGIT", method = "Inverse"
+  )
+  study <- tidy_meta(mp)[!tidy_meta(mp)$is_summary, ]
+
+  expect_equal(study$estimate, c(1, 0, 0.25), tolerance = 1e-8)
+  expect_true(all(study$estimate >= study$ci_lower - 1e-8))
+
+  # The analysis scale is left alone when nothing is back-transformed.
+  raw <- tidy_meta(mp, back_trans = "none")
+  expect_equal(raw$estimate[!raw$is_summary], mp$TE, tolerance = 1e-8)
+})
+
+test_that("metarate study estimates are the observed rates", {
+  skip_if_not_installed("meta")
+
+  mr <- meta::metarate(
+    event = c(0, 5, 12), time = c(50, 200, 100),
+    studlab = c("none", "b", "c"), sm = "IRLN"
+  )
+  study <- tidy_meta(mr)[!tidy_meta(mr)$is_summary, ]
+
+  expect_equal(study$estimate, c(0, 5, 12) / c(50, 200, 100), tolerance = 1e-8)
+})
+
+test_that("GLMM fits get no invented study weights", {
+  skip_if_not_installed("meta")
+  skip_if_not_installed("lme4")
+
+  mg <- suppressWarnings(meta::metaprop(
+    event = c(15, 20, 12, 25), n = c(50, 60, 55, 70),
+    studlab = paste0("S", 1:4), sm = "PLOGIT", method = "GLMM"
+  ))
+  skip_if_not(any(mg$method == "GLMM"))
+
+  # A GLMM does not weight studies by inverse variance, and meta leaves
+  # w.common / w.random empty; meta::forest() then omits the weight column.
+  td <- tidy_meta(mg)
+  expect_true(all(is.na(td$weight)))
+
+  built <- ggplot2::ggplot_build(ggforest(mg, columns = TRUE))
+  labs <- unlist(lapply(built$data, function(d) {
+    if ("label" %in% names(d)) as.character(d$label)
+  }))
+  expect_true("Weight" %in% labs)   # the header is still drawn
+  expect_false(any(grepl("%$", labs)))
+
+  # An inverse-variance fit of the same data still gets weights.
+  mi <- meta::metaprop(
+    event = c(15, 20, 12, 25), n = c(50, 60, 55, 70),
+    studlab = paste0("S", 1:4), sm = "PLOGIT", method = "Inverse"
+  )
+  expect_true(all(is.finite(tidy_meta(mi)$weight[!tidy_meta(mi)$is_summary])))
 })

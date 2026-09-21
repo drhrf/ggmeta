@@ -93,3 +93,34 @@ test_that("values that round to zero are printed without a minus sign", {
   expect_true("0.00" %in% labs)
   expect_true("[-0.20, 0.20]" %in% labs)
 })
+
+test_that("zero weights print as 0.0% and unusable weights leave a blank cell", {
+  df <- data.frame(
+    studlab  = c("A", "B", "C", "D"),
+    estimate = c(0.2, 0.4, 0.3, 0.5),
+    ci_lower = c(0.1, 0.2, 0.1, 0.3),
+    ci_upper = c(0.3, 0.6, 0.5, 0.7),
+    weight   = c(NA, 0, -1, 5)
+  )
+  expect_message(p <- ggforest(df, columns = TRUE), "C")
+  labs <- collect_labels(p)
+
+  expect_true("0.0%" %in% labs)     # a zero weight is a real share
+  expect_false("-25.0%" %in% labs)  # a negative weight is not
+  # The percentages come from the positive weights only, so they sum to 100.
+  pct <- labs[grepl("%$", labs)]
+  expect_equal(sum(as.numeric(sub("%", "", pct))), 100, tolerance = 1e-8)
+})
+
+test_that("an infinite weight is treated as missing", {
+  df <- data.frame(
+    studlab  = c("A", "B"),
+    estimate = c(0.2, 0.4),
+    ci_lower = c(0.1, 0.2),
+    ci_upper = c(0.3, 0.6),
+    weight   = c(Inf, 5)
+  )
+  labs <- collect_labels(suppressMessages(ggforest(df, columns = TRUE)))
+  expect_equal(sum(grepl("%$", labs)), 1L)
+  expect_true("100.0%" %in% labs)
+})

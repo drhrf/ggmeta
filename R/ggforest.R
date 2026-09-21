@@ -401,12 +401,23 @@ ggforest.data.frame <- function(
 #' both linear and log axes.
 #' @noRd
 forest_columns_spec <- function(x, columns, sm, effect_header, log_scale) {
-  # Study weight percentages (over the real study rows only).
+  # Study weight percentages (over the real study rows only). A negative or
+  # infinite weight has no share of the total to report, so it is dropped to a
+  # blank cell and kept out of the denominator; a zero weight is a real 0.0%.
   is_study <- !x$is_summary & x$summary_type == "none"
-  wsum <- sum(x$weight[is_study], na.rm = TRUE)
+  w <- x$weight
+  drop <- which(is_study & !is.na(w) & (!is.finite(w) | w < 0))
+  if (length(drop) > 0) {
+    dropped <- as.character(x$studlab)[drop]
+    cli::cli_inform(c(
+      "i" = "Ignored a negative or non-finite weight for {length(dropped)} stud{?y/ies}: {.val {dropped}}."
+    ))
+    w[drop] <- NA_real_
+  }
+  wsum <- sum(w[which(is_study & !is.na(w) & w > 0)])
   wpct <- rep(NA_real_, nrow(x))
   if (is.finite(wsum) && wsum > 0) {
-    wpct[is_study] <- x$weight[is_study] / wsum * 100
+    wpct[is_study] <- w[is_study] / wsum * 100
   }
 
   f2 <- function(v) {

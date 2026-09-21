@@ -34,8 +34,11 @@
 #'   Default: `c(1, 6)`. The side of each square is
 #'   `min + (max - min) * sqrt(weight / max(weight))`, i.e. the part above the
 #'   minimum grows with the square root of the weight. Missing or
-#'   non-positive weights get the minimum size. A constant `size` (or a mapped
-#'   `size` aesthetic) overrides the weight-based size.
+#'   non-positive weights get the minimum size; when no study has a usable
+#'   weight there is nothing to scale, so every square is drawn at the middle
+#'   of the range (as `meta::forest()` does for a `method = "GLMM"` fit). A
+#'   constant `size` (or a mapped `size` aesthetic) overrides the weight-based
+#'   size.
 #'
 #' @return A ggplot2 layer.
 #' @export
@@ -125,7 +128,9 @@ StatForestCI <- ggproto("StatForestCI", Stat,
         from = c(0, 1)
       )
     } else {
-      data$weight_sq <- point_size_range[1]
+      # No usable weight anywhere: every square is the same size, so there is
+      # no reason to draw them all at the minimum.
+      data$weight_sq <- mean(point_size_range)
     }
     # A size mapped by the user takes precedence over the weight-based size.
     if (!user_size) data$size <- data$weight_sq
