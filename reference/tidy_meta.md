@@ -79,9 +79,16 @@ tidy_meta(
   back-transformed with its correct inverse via
   [`meta::backtransf()`](https://rdrr.io/pkg/meta/man/meta-transf.html)
   (exponentiation for ratios, inverse-logit for `PLOGIT`, Fisher's z to
-  correlation for `ZCOR`, etc.); linear measures are left unchanged. Use
-  `"exp"` to force exponentiation or `"none"` to keep the analysis
-  scale.
+  correlation for `ZCOR`, etc.); linear measures are left unchanged.
+  Study rows of
+  [`meta::metaprop()`](https://rdrr.io/pkg/meta/man/metaprop.html) and
+  [`meta::metarate()`](https://rdrr.io/pkg/meta/man/metarate.html)
+  objects get the observed `event / n` or `event / time` instead, as in
+  [`meta::forest()`](https://wviechtb.github.io/metafor/reference/forest.html),
+  because the stored `TE` of a study with zero or all events is
+  continuity-corrected and so disagrees with its exact confidence
+  limits. Use `"exp"` to force exponentiation or `"none"` to keep the
+  analysis scale.
 
 - sort_studies:
 
@@ -123,7 +130,8 @@ A `data.frame` with one row per study or summary, with columns:
 
 - weight:
 
-  Study weight (numeric, `NA` for summaries)
+  Study weight (numeric, `NA` for summaries, and for every study of a
+  `method = "GLMM"` fit, which uses none)
 
 - p_value:
 

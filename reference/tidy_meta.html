@@ -116,7 +116,11 @@ back-transformed to the natural scale? If <code>"auto"</code> (default), each su
 measure is back-transformed with its correct inverse via
 <code><a href="https://rdrr.io/pkg/meta/man/meta-transf.html" class="external-link">meta::backtransf()</a></code> (exponentiation for ratios, inverse-logit for
 <code>PLOGIT</code>, Fisher's z to correlation for <code>ZCOR</code>, etc.); linear measures are
-left unchanged. Use <code>"exp"</code> to force exponentiation or <code>"none"</code> to keep
+left unchanged. Study rows of <code><a href="https://rdrr.io/pkg/meta/man/metaprop.html" class="external-link">meta::metaprop()</a></code> and <code><a href="https://rdrr.io/pkg/meta/man/metarate.html" class="external-link">meta::metarate()</a></code>
+objects get the observed <code>event / n</code> or <code>event / time</code> instead, as in
+<code><a href="https://wviechtb.github.io/metafor/reference/forest.html" class="external-link">meta::forest()</a></code>, because the stored <code>TE</code> of a study with zero or all
+events is continuity-corrected and so disagrees with its exact confidence
+limits. Use <code>"exp"</code> to force exponentiation or <code>"none"</code> to keep
 the analysis scale.</p></dd>
 
 
@@ -153,7 +157,8 @@ within-group summary rows when subgroups are present.</p></dd>
 <dd><p>Standard error (numeric)</p></dd>
 
 <dt>weight</dt>
-<dd><p>Study weight (numeric, <code>NA</code> for summaries)</p></dd>
+<dd><p>Study weight (numeric, <code>NA</code> for summaries, and for
+every study of a <code>method = "GLMM"</code> fit, which uses none)</p></dd>
 
 <dt>p_value</dt>
 <dd><p>P-value (numeric)</p></dd>

@@ -129,8 +129,11 @@ spacing between study rows. Default: <code>0.3</code>.</p></dd>
 Default: <code>c(1, 6)</code>. The side of each square is
 <code>min + (max - min) * sqrt(weight / max(weight))</code>, i.e. the part above the
 minimum grows with the square root of the weight. Missing or
-non-positive weights get the minimum size. A constant <code>size</code> (or a mapped
-<code>size</code> aesthetic) overrides the weight-based size.</p></dd>
+non-positive weights get the minimum size; when no study has a usable
+weight there is nothing to scale, so every square is drawn at the middle
+of the range (as <code><a href="https://wviechtb.github.io/metafor/reference/forest.html" class="external-link">meta::forest()</a></code> does for a <code>method = "GLMM"</code> fit). A
+constant <code>size</code> (or a mapped <code>size</code> aesthetic) overrides the weight-based
+size.</p></dd>
 
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>

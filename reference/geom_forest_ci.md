@@ -107,8 +107,12 @@ geom_forest_ci(
   Minimum and maximum point size in mm. Default: `c(1, 6)`. The side of
   each square is `min + (max - min) * sqrt(weight / max(weight))`, i.e.
   the part above the minimum grows with the square root of the weight.
-  Missing or non-positive weights get the minimum size. A constant
-  `size` (or a mapped `size` aesthetic) overrides the weight-based size.
+  Missing or non-positive weights get the minimum size; when no study
+  has a usable weight there is nothing to scale, so every square is
+  drawn at the middle of the range (as
+  [`meta::forest()`](https://wviechtb.github.io/metafor/reference/forest.html)
+  does for a `method = "GLMM"` fit). A constant `size` (or a mapped
+  `size` aesthetic) overrides the weight-based size.
 
 - na.rm:
 

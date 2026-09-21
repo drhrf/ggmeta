@@ -7,6 +7,39 @@
 
 ### Bug fixes
 
+- Study estimates of single-group measures are now the observed values,
+  as in
+  [`meta::forest()`](https://wviechtb.github.io/metafor/reference/forest.html).
+  [`meta::metaprop()`](https://rdrr.io/pkg/meta/man/metaprop.html) and
+  [`meta::metarate()`](https://rdrr.io/pkg/meta/man/metarate.html) store
+  a continuity-corrected `TE` for studies with zero or all events, so
+  back-transforming it put the point outside its own exact interval: 12
+  of 12 events was drawn at 0.96 against an upper limit of 1.00.
+  [`tidy_meta()`](https://drhrf.github.io/ggmeta/reference/tidy_meta.md)
+  now uses `event / n` and `event / time` for every study of these
+  types, independently of whether a correction was applied. The analysis
+  scale (`back_trans = "none"`) is unaffected.
+- Studies of a generalised linear mixed model (`method = "GLMM"`) no
+  longer get invented weights. `meta` leaves `w.common` and `w.random`
+  empty for such fits because the model does not weight studies by
+  inverse variance, and
+  [`meta::forest()`](https://wviechtb.github.io/metafor/reference/forest.html)
+  drops the weight column accordingly;
+  [`tidy_meta()`](https://drhrf.github.io/ggmeta/reference/tidy_meta.md)
+  used to fall back to `1 / seTE^2`, so
+  [`ggforest()`](https://drhrf.github.io/ggmeta/reference/ggforest.md)
+  printed percentages the model never used. The weight cells are now
+  blank and the squares are equally sized.
+- [`geom_forest_ci()`](https://drhrf.github.io/ggmeta/reference/geom_forest_ci.md)
+  draws equal, mid-sized squares when no study has a usable weight,
+  instead of shrinking every square to the minimum size. Mixed weights
+  are unaffected: a missing weight alongside usable ones still gets the
+  minimum.
+- Zero and unusable study weights are now formatted sensibly in the
+  table columns. A zero weight prints as `0.0%`; a negative or infinite
+  weight is reported once with a message and left blank instead of
+  printing e.g. `-25.0%` and rescaling another study to `125.0%`.
+  Percentages are computed from the positive weights only.
 - [`tidy_meta()`](https://drhrf.github.io/ggmeta/reference/tidy_meta.md)
   and
   [`ggforest()`](https://drhrf.github.io/ggmeta/reference/ggforest.md)
