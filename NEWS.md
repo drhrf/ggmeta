@@ -5,6 +5,12 @@
 
 ## Bug fixes
 
+* The heterogeneity caption no longer prints `p = NA` for a generalised linear
+  mixed model. A GLMM tests heterogeneity twice, so `meta` stores `Q`, `df.Q`
+  and `pval.Q` as a Wald and a likelihood-ratio pair; the whole pair reached
+  the caption, which printed both Q values and lost the p-value.
+  `ggforest()` now takes the first element of each, the Wald test, as
+  `meta::forest()` does for its own one-line caption.
 * Study estimates of single-group measures are now the observed values, as in
   `meta::forest()`. `meta::metaprop()` and `meta::metarate()` store a
   continuity-corrected `TE` for studies with zero or all events, so
