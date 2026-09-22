@@ -29,7 +29,7 @@
 #' @importFrom ggplot2 element_rect
 #' @importFrom ggplot2 margin
 #' @importFrom ggplot2 rel
-#' @importFrom ggplot2 `%+replace%`
+#' @importFrom ggplot2 %+replace%
 
 # ---- ggplot2 high-level functions ----
 #' @importFrom ggplot2 ggplot
