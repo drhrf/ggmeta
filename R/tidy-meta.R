@@ -60,6 +60,7 @@
 #'
 #' @examples
 #' \donttest{
+#' if (requireNamespace("meta", quietly = TRUE)) {
 #' library(meta)
 #' m <- metabin(event.e, n.e, event.c, n.c,
 #'   data = data.frame(
@@ -70,6 +71,7 @@
 #'   sm = "RR"
 #' )
 #' tidy_meta(m)
+#' }
 #' }
 tidy_meta <- function(x, ...) {
   UseMethod("tidy_meta")

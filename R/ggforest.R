@@ -17,6 +17,7 @@
 #'
 #' @examples
 #' \donttest{
+#' if (requireNamespace("meta", quietly = TRUE)) {
 #' library(meta)
 #' m <- metabin(event.e, n.e, event.c, n.c,
 #'   data = data.frame(
@@ -29,6 +30,7 @@
 #'   sm = "RR"
 #' )
 #' ggforest(m)
+#' }
 #' }
 ggforest <- function(x, ...) {
   UseMethod("ggforest")

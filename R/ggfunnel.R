@@ -16,6 +16,7 @@
 #'
 #' @examples
 #' \donttest{
+#' if (requireNamespace("meta", quietly = TRUE)) {
 #' library(meta)
 #' m <- metabin(event.e, n.e, event.c, n.c,
 #'   data = data.frame(
@@ -25,6 +26,7 @@
 #'   studlab = paste("Study", 1:6), sm = "RR"
 #' )
 #' ggfunnel(m)
+#' }
 #' }
 ggfunnel <- function(x, ...) {
   UseMethod("ggfunnel")

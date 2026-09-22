@@ -13,6 +13,7 @@
 #'
 #' @examples
 #' \donttest{
+#' if (requireNamespace("meta", quietly = TRUE)) {
 #' library(meta)
 #' library(ggplot2)
 #' m <- metabin(event.e, n.e, event.c, n.c,
@@ -26,6 +27,7 @@
 #' library(ggmeta)
 #' ggplot(fortify(m), aes(x = estimate, y = studlab)) +
 #'   geom_point()
+#' }
 #' }
 fortify.meta <- function(model, data, ...) {
   tidy_meta(model, ...)
