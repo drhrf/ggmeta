@@ -36,10 +36,8 @@ A `data.frame` as returned by
 
 ``` r
 # \donttest{
+if (requireNamespace("meta", quietly = TRUE)) {
 library(meta)
-#> Loading required package: metabook
-#> Loading 'meta' package (version 8.5-0).
-#> Type 'help(meta)' for a brief overview.
 library(ggplot2)
 m <- metabin(event.e, n.e, event.c, n.c,
   data = data.frame(
@@ -52,6 +50,10 @@ m <- metabin(event.e, n.e, event.c, n.c,
 library(ggmeta)
 ggplot(fortify(m), aes(x = estimate, y = studlab)) +
   geom_point()
+}
+#> Loading required package: metabook
+#> Loading 'meta' package (version 8.5-0).
+#> Type 'help(meta)' for a brief overview.
 
 # }
 ```

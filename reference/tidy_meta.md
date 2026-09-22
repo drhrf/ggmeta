@@ -192,6 +192,7 @@ The returned data frame has the following attributes:
 
 ``` r
 # \donttest{
+if (requireNamespace("meta", quietly = TRUE)) {
 library(meta)
 m <- metabin(event.e, n.e, event.c, n.c,
   data = data.frame(
@@ -202,6 +203,7 @@ m <- metabin(event.e, n.e, event.c, n.c,
   sm = "RR"
 )
 tidy_meta(m)
+}
 #>                    studlab estimate   ci_lower  ci_upper        se    weight
 #> 1                  Study A 1.400000 0.65296960  3.001671 0.3891382  6.603774
 #> 2                  Study B 1.200000 0.74247238  1.939466 0.2449490 16.666667
