@@ -70,6 +70,7 @@ plot compose on one canvas with, for example, \pkg{patchwork}.
 }
 \examples{
 \donttest{
+if (requireNamespace("meta", quietly = TRUE)) {
 library(meta)
 m <- metabin(event.e, n.e, event.c, n.c,
   data = data.frame(
@@ -79,5 +80,6 @@ m <- metabin(event.e, n.e, event.c, n.c,
   studlab = paste("Study", 1:6), sm = "RR"
 )
 ggfunnel(m)
+}
 }
 }

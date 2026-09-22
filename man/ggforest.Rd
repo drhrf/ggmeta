@@ -135,6 +135,7 @@ Accepts a \pkg{meta} object (created by \code{\link[meta:metabin]{meta::metabin(
 }
 \examples{
 \donttest{
+if (requireNamespace("meta", quietly = TRUE)) {
 library(meta)
 m <- metabin(event.e, n.e, event.c, n.c,
   data = data.frame(
@@ -147,5 +148,6 @@ m <- metabin(event.e, n.e, event.c, n.c,
   sm = "RR"
 )
 ggforest(m)
+}
 }
 }

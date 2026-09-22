@@ -111,6 +111,7 @@ a tidy data frame suitable for use with ggmeta geometries and
 }
 \examples{
 \donttest{
+if (requireNamespace("meta", quietly = TRUE)) {
 library(meta)
 m <- metabin(event.e, n.e, event.c, n.c,
   data = data.frame(
@@ -121,5 +122,6 @@ m <- metabin(event.e, n.e, event.c, n.c,
   sm = "RR"
 )
 tidy_meta(m)
+}
 }
 }

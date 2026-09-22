@@ -22,6 +22,7 @@ a tidy data frame. It is a wrapper around \code{\link[=tidy_meta]{tidy_meta()}}.
 }
 \examples{
 \donttest{
+if (requireNamespace("meta", quietly = TRUE)) {
 library(meta)
 library(ggplot2)
 m <- metabin(event.e, n.e, event.c, n.c,
@@ -35,5 +36,6 @@ m <- metabin(event.e, n.e, event.c, n.c,
 library(ggmeta)
 ggplot(fortify(m), aes(x = estimate, y = studlab)) +
   geom_point()
+}
 }
 }
