@@ -1,7 +1,7 @@
-# ggmeta 0.1.0.9000
+# ggmeta 0.1.1
 
-* Development version. Post-release touches: a package hex-sticker logo and a
-  CRAN status badge in the README.
+Bug-fix release. The display of single-group measures (proportions and rates)
+and of generalised linear mixed models now follows `meta::forest()`.
 
 ## Bug fixes
 
@@ -65,6 +65,7 @@
 * New tests document the behaviour at boundary conditions (missing or
   non-positive weights, missing confidence limits or estimates, single-study
   pooling, funnel plots without usable studies, single-group measures).
+* The README gained a package hex-sticker logo and a CRAN status badge.
 
 # ggmeta 0.1.0
 
