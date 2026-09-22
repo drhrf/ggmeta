@@ -1,3 +1,5 @@
+# ggmeta (development version)
+
 # ggmeta 0.1.1
 
 Bug-fix release. The display of single-group measures (proportions and rates)
