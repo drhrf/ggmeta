@@ -5,9 +5,11 @@ Composable
 Customising
 DerSimonian
 FBE
+GLMM
 JAMA
 Lifecycle
 ORCID
+README
 Recolour
 RevMan
 SMD
@@ -19,6 +21,8 @@ colours
 customisation
 customise
 customising
+exponentiates
+generalised
 geoms
 ggplot
 ggplots
