@@ -1,6 +1,10 @@
 # Changelog
 
+## ggmeta (development version)
+
 ## ggmeta 0.1.1
+
+CRAN release: 2026-09-22
 
 Bug-fix release. The display of single-group measures (proportions and
 rates) and of generalised linear mixed models now follows
