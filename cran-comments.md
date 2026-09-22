@@ -27,12 +27,23 @@ See NEWS.md for the full list.
 
 ## Test environments
 
-* Local macOS 15 (aarch64), R 4.6.1, `R CMD check --as-cran`
-* win-builder, R-devel
-* GitHub Actions:
-  * macOS-latest, R release
-  * windows-latest, R release
-  * ubuntu-latest, R devel, release, and oldrel-1
+* Local macOS Tahoe 26.6.2 (aarch64), R 4.5.3, `R CMD check --as-cran --run-donttest`
+* win-builder, R-devel (2026-09-21 r90579, ucrt) -- OK
+* mac-builder, r-release-macosx-arm64, R 4.6.1 -- OK
+* R-hub v2 (GitHub Actions), R-devel:
+  * linux -- OK
+  * windows -- OK
+  * macos-arm64 -- OK
+  * donttest (`--run-donttest` re-check) -- OK
+  * vnu (W3C HTML validation) -- OK
+  * nosuggests (all Suggests removed) -- vignette rebuild fails because
+    `rmarkdown` itself is unavailable to render any `.Rmd` file, not because
+    of unconditional `meta` usage; every vignette already gates its
+    `meta`-dependent chunks with `eval = requireNamespace("meta", quietly = TRUE)`.
+    CRAN's own check machines always have Suggests installed, so this
+    cannot occur there.
+* `urlchecker::url_check()` -- no issues
+* `spelling::spell_check_package()` -- no issues
 
 ## Notes for the reviewer
 
