@@ -151,6 +151,14 @@ tidy_meta.meta <- function(x,
   check_meta_installed()
   back_trans <- match.arg(back_trans)
 
+  # List elements 'byvar' and 'bylevs' were
+  # - replaced by 'subgroup' and 'subgroup.levels' in meta 5.0-0
+  # - removed from meta-analysis objects in meta 9.0-0
+  if (is.null(x$byvar) && !is.null(x$subgroup)) {
+    x$byvar <- x$subgroup
+    x$bylevs <- x$subgroup.levels
+  }
+
   # Detect models and summary measure
   models <- detect_models(x)
   sm <- x$sm
